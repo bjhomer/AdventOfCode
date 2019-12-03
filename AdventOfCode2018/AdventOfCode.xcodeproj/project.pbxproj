@@ -20,6 +20,8 @@
 		B7B6A3591FEF1EC50081F884 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B6A3581FEF1EC50081F884 /* Helpers.swift */; };
 		B7B6A35A1FEF1ED40081F884 /* Day8Input.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7B6A3571FEF1EB20081F884 /* Day8Input.txt */; };
 		B7B6A35B1FEF1ED70081F884 /* Day8.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B6A3561FEF1EAC0081F884 /* Day8.swift */; };
+		B7B6A3601FEF2CE60081F884 /* Day9.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B6A35F1FEF2CD80081F884 /* Day9.swift */; };
+		B7B6A3611FEF2CE60081F884 /* Day9Input.txt in Resources */ = {isa = PBXBuildFile; fileRef = B7B6A35E1FEF2CD80081F884 /* Day9Input.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		B7B6A3561FEF1EAC0081F884 /* Day8.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day8.swift; sourceTree = "<group>"; };
 		B7B6A3571FEF1EB20081F884 /* Day8Input.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day8Input.txt; sourceTree = "<group>"; };
 		B7B6A3581FEF1EC50081F884 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		B7B6A35E1FEF2CD80081F884 /* Day9Input.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Day9Input.txt; sourceTree = "<group>"; };
+		B7B6A35F1FEF2CD80081F884 /* Day9.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day9.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,7 @@
 				B79573C31FEEB96100C909D4 /* Day 6 */,
 				B7B6A3501FEEF6C70081F884 /* Day 7 */,
 				B7B6A3551FEF1EA30081F884 /* Day 8 */,
+				B7B6A35D1FEF2CCF0081F884 /* Day 9 */,
 				B79573B21FEEB8B300C909D4 /* AdventOfCode */,
 				B795739F1FEEB7F800C909D4 /* Products */,
 			);
@@ -124,6 +129,15 @@
 			path = "Day 8";
 			sourceTree = "<group>";
 		};
+		B7B6A35D1FEF2CCF0081F884 /* Day 9 */ = {
+			isa = PBXGroup;
+			children = (
+				B7B6A35F1FEF2CD80081F884 /* Day9.swift */,
+				B7B6A35E1FEF2CD80081F884 /* Day9Input.txt */,
+			);
+			path = "Day 9";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -185,6 +199,7 @@
 			files = (
 				B79573C21FEEB8B800C909D4 /* Day5Input.txt in Resources */,
 				B7B6A3541FEEFCF80081F884 /* Day7Input.txt in Resources */,
+				B7B6A3611FEF2CE60081F884 /* Day9Input.txt in Resources */,
 				B79573B81FEEB8B300C909D4 /* Assets.xcassets in Resources */,
 				B7B6A35A1FEF1ED40081F884 /* Day8Input.txt in Resources */,
 				B79573BB1FEEB8B300C909D4 /* Main.storyboard in Resources */,
@@ -203,6 +218,7 @@
 				B7B6A3521FEEF6D60081F884 /* Day7.swift in Sources */,
 				B79573C51FEEB96F00C909D4 /* Day6.swift in Sources */,
 				B79573C11FEEB8B800C909D4 /* Day5.swift in Sources */,
+				B7B6A3601FEF2CE60081F884 /* Day9.swift in Sources */,
 				B7B6A3591FEF1EC50081F884 /* Helpers.swift in Sources */,
 				B79573B41FEEB8B300C909D4 /* AppDelegate.swift in Sources */,
 				B7B6A35B1FEF1ED70081F884 /* Day8.swift in Sources */,
