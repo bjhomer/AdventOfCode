@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1120"
+   LastUpgradeVersion = "1220"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B7686C8D2394E65C00126E1E"
-               BuildableName = "AdventOfCode"
-               BlueprintName = "AdventOfCode"
-               ReferencedContainer = "container:AdventOfCode.xcodeproj">
+               BlueprintIdentifier = "AdventOfCode2020"
+               BuildableName = "AdventOfCode2020"
+               BlueprintName = "AdventOfCode2020"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AdventOfCode2020Tests"
+               BuildableName = "AdventOfCode2020Tests"
+               BlueprintName = "AdventOfCode2020Tests"
+               ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,6 +42,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AdventOfCode2020Tests"
+               BuildableName = "AdventOfCode2020Tests"
+               BlueprintName = "AdventOfCode2020Tests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -44,19 +68,15 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B7686C8D2394E65C00126E1E"
-            BuildableName = "AdventOfCode"
-            BlueprintName = "AdventOfCode"
-            ReferencedContainer = "container:AdventOfCode.xcodeproj">
+            BlueprintIdentifier = "AdventOfCode2020"
+            BuildableName = "AdventOfCode2020"
+            BlueprintName = "AdventOfCode2020"
+            ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "3"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "input"
+            argument = "2"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
@@ -71,10 +91,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B7686C8D2394E65C00126E1E"
-            BuildableName = "AdventOfCode"
-            BlueprintName = "AdventOfCode"
-            ReferencedContainer = "container:AdventOfCode.xcodeproj">
+            BlueprintIdentifier = "AdventOfCode2020"
+            BuildableName = "AdventOfCode2020"
+            BlueprintName = "AdventOfCode2020"
+            ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

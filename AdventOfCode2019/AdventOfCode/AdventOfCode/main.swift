@@ -32,6 +32,8 @@ do {
         try runPuzzle1(inputFile!)
     case 2:
         try runPuzzle2(inputFile)
+    case 3:
+        try runPuzzle3(inputFile)
     default:
         print("Unknown puzzle number")
     }
