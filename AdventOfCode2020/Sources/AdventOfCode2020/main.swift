@@ -13,6 +13,7 @@ protocol DailyChallenge {
     static func run(input: Data)
 }
 
+
 struct Advent: ParsableCommand {
     @Argument(help: "Which day should we run?") var day: Int = 4
 
@@ -33,10 +34,10 @@ struct Advent: ParsableCommand {
 
         print("Running day \(day)")
         switch day {
-        case 1: Day1.run(input: data)
-        case 2: Day2.run(input: data)
-        case 3: Day3.run(input: data)
-        case 4: Day4.run(input: data)
+        case 1: day1(input: data)
+        case 2: day2(input: data)
+        case 3: day3(input: data)
+        case 4: day4(input: data)
         default:
             print("Unrecognized day")
         }

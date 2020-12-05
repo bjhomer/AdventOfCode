@@ -8,24 +8,22 @@
 import Foundation
 
 
-struct Day2: DailyChallenge {
-    static func run(input: Data) {
-        let lines = String(decoding: input, as: UTF8.self)
-            .split(separator: "\n")
-            .compactMap { PasswordLine(String($0)) }
+func day2(input: Data) {
+    let lines = String(decoding: input, as: UTF8.self)
+        .split(separator: "\n")
+        .compactMap { PasswordLine(String($0)) }
 
 
-        print("-------")
-        print("Part 1:")
-        let validLinesPart1 = lines.filter( {$0.checkValidityPart1() } )
-        print(validLinesPart1.count)
+    print("-------")
+    print("Part 1:")
+    let validLinesPart1 = lines.filter( {$0.checkValidityPart1() } )
+    print(validLinesPart1.count)
 
-        print("")
-        print("-------")
-        print("Part 2:")
-        let validLinesPart2 = lines.filter( {$0.checkValidityPart2() } )
-        print(validLinesPart2.count)
-    }
+    print("")
+    print("-------")
+    print("Part 2:")
+    let validLinesPart2 = lines.filter( {$0.checkValidityPart2() } )
+    print(validLinesPart2.count)
 }
 
 struct PasswordRequirementPart1 {

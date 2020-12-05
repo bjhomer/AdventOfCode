@@ -7,36 +7,34 @@
 
 import Foundation
 
-struct Day3: DailyChallenge {
-    static func run(input: Data) {
+func day3(input: Data) {
 
-        let lines = String(decoding: input, as: UTF8.self)
-            .split(separator: "\n")
-            .map { Array($0) }
+    let lines = String(decoding: input, as: UTF8.self)
+        .split(separator: "\n")
+        .map { Array($0) }
 
-        let forest = RepeatingForest(rows: lines)
-        let treeCount = forest.diagonalTreeCount(dx: 3, dy: 1)
+    let forest = RepeatingForest(rows: lines)
+    let treeCount = forest.diagonalTreeCount(dx: 3, dy: 1)
 
-        print("------")
-        print("Part 1:")
-        print(treeCount)
+    print("------")
+    print("Part 1:")
+    print(treeCount)
 
-        print("")
-        print("------")
-        print("Part 2:")
+    print("")
+    print("------")
+    print("Part 2:")
 
 
-        let slopes = [
-            (1, 1),
-            (3, 1),
-            (5, 1),
-            (7, 1),
-            (1, 2),
-        ]
-        let multipliedCounts = slopes.map { forest.diagonalTreeCount(dx: $0.0, dy: $0.1) }
-            .reduce(1, *)
-        print(multipliedCounts)
-    }
+    let slopes = [
+        (1, 1),
+        (3, 1),
+        (5, 1),
+        (7, 1),
+        (1, 2),
+    ]
+    let multipliedCounts = slopes.map { forest.diagonalTreeCount(dx: $0.0, dy: $0.1) }
+        .reduce(1, *)
+    print(multipliedCounts)
 }
 
 private struct RepeatingForest {

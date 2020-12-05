@@ -6,11 +6,9 @@
 
 import Foundation
 
-struct Day1: DailyChallenge {
-    static func run(input: Data) {
-        day1part1(input: input)
-        day1part2(input: input)
-    }
+func day1(input: Data) {
+    day1part1(input: input)
+    day1part2(input: input)
 }
 
 private func day1part1(input: Data)  {

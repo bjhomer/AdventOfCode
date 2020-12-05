@@ -26,7 +26,7 @@ struct Regex {
 
     private var regex: NSRegularExpression
 
-    init(pattern: String)  {
+    init(_ pattern: String)  {
         regex = try! NSRegularExpression(pattern: pattern)
     }
 
@@ -40,5 +40,11 @@ struct Regex {
     func match(_ optStr: String?) -> Match? {
         guard let str = optStr else { return nil }
         return self.matches(in: str).first
+    }
+}
+
+extension Regex: ExpressibleByStringLiteral {
+    init(stringLiteral value: StringLiteralType) {
+        self.init(value)
     }
 }
