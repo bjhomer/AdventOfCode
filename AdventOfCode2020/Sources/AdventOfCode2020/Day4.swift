@@ -54,8 +54,7 @@ struct Passport {
     var eyr: Int? { fields["eyr"].flatMap(Int.init) }
     var hgt: Height? {
         let regex = Regex(pattern: #"^(\d+)(in|cm)$"#)
-        guard let str = fields["hgt"],
-              let match = regex.match(str),
+        guard let match = regex.match(fields["hgt"]),
               let number = match[1].flatMap(Int.init),
               let unit = match[2]
               else { return nil }
@@ -63,16 +62,14 @@ struct Passport {
     }
     var hcl: String? {
         let regex = Regex(pattern: #"^#([0-9a-f]{6})"#)
-        guard let str = fields["hcl"],
-              let match = regex.match(str)
+        guard let match = regex.match(fields["hcl"])
         else { return nil }
         return match[0]
     }
     var ecl: EyeColor? { fields["ecl"].flatMap(EyeColor.init(rawValue:)) }
     var pid: Int? {
         let regex = Regex(pattern: #"^\d{9}$"#)
-        guard let str = fields["pid"],
-              let matchString = regex.match(str)?[0],
+        guard let matchString = regex.match(fields["pid"])?[0],
               let int = Int(matchString)
         else { return nil }
         return int
@@ -87,7 +84,7 @@ struct Passport {
         if let byr = self.byr, (1920...2002).contains(byr),
            let iyr = self.iyr, (2010...2020).contains(iyr),
            let eyr = self.eyr, (2020...2030).contains(eyr),
-           self.hgt != nil,
+           let hgt = self.hgt, hgt.isValid,
            self.hcl != nil,
            self.ecl != nil,
            self.pid != nil
