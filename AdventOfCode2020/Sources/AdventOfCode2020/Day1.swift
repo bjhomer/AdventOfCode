@@ -1,6 +1,5 @@
 //
 //  Day1.swift
-//  AdventOfCode2020
 //
 //  Created by BJ Homer on 12/1/20.
 //

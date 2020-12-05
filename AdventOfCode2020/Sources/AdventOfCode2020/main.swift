@@ -14,7 +14,7 @@ protocol DailyChallenge {
 }
 
 struct Advent: ParsableCommand {
-    @Argument(help: "Which day should we run?") var day: Int = 3
+    @Argument(help: "Which day should we run?") var day: Int = 4
 
     var inputFile: URL {
         let thisFile = URL(fileURLWithPath:#file)
@@ -36,6 +36,7 @@ struct Advent: ParsableCommand {
         case 1: Day1.run(input: data)
         case 2: Day2.run(input: data)
         case 3: Day3.run(input: data)
+        case 4: Day4.run(input: data)
         default:
             print("Unrecognized day")
         }
