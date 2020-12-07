@@ -8,7 +8,28 @@
 import Foundation
 import Algorithms
 
+func day4_2(input inputData: Data) {
+    let input = String(decoding: inputData, as: UTF8.self)
+
+
+    let dictionaries = input
+        .split(separator: "\n", omittingEmptySubsequences: false)
+        .chunked(by: { $1 != "" })
+        .map {
+            $0  .joined(separator: " ") // Join consecutive lines of the same passport
+                .split(separator: " ")  // Split into passport fields
+                .map { $0.split(separator: ":") } // Convert to key-value pair arrays
+                .map { (String($0[0]), String($0[1])) } // Map each kvpair array into a tuple
+        }
+        .map { Dictionary(uniqueKeysWithValues: $0) }
+
+
+    print(dictionaries)
+}
+
 func day4(input inputData: Data) {
+    day4_2(input: inputData)
+
     let input = String(decoding: inputData, as: UTF8.self)
 
     let lines = input
@@ -124,5 +145,11 @@ private extension Array where Element: StringProtocol {
     func asStringPair() -> (String, String)? {
         guard self.count == 2 else { return nil }
         return (String(self[0]), String(self[1]))
+    }
+}
+
+extension Collection {
+    func pipe<T>(_ transform: (Self)->T) -> T {
+        transform(self)
     }
 }

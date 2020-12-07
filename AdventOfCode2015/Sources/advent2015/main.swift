@@ -1,17 +1,8 @@
-//
-//  main.swift
-//  AdventOfCode2020
-//
-//  Created by BJ Homer on 12/1/20.
-//
-
-
 import ArgumentParser
 import Foundation
 
-
 struct Advent: ParsableCommand {
-    @Argument(help: "Which day should we run?") var day: Int = 4
+    @Argument(help: "Which day should we run?") var day: Int = 7
 
     var inputFile: URL {
         let thisFile = URL(fileURLWithPath:#file)
@@ -23,18 +14,20 @@ struct Advent: ParsableCommand {
 
     func run() throws {
 
-        guard let data = try? Data(contentsOf: inputFile) else {
+        guard let str = try? String(contentsOf: inputFile) else {
             print("No data found at \(inputFile)")
             return
         }
 
         print("Running day \(day)")
         switch day {
-        case 1: day1(input: data)
-        case 2: day2(input: data)
-        case 3: day3(input: data)
-        case 4: day4(input: data)
-        case 5: day5(input: data)
+        case 1: day1(input: str)
+        case 2: day2(input: str)
+        case 3: day3(input: str)
+        case 4: day4(input: str)
+        case 5: day5(input: str)
+        case 6: day6(input: str)
+        case 7: day7(input: str)
         default:
             print("Unrecognized day")
         }
@@ -42,5 +35,4 @@ struct Advent: ParsableCommand {
 }
 
 Advent.main()
-
 

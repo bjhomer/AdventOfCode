@@ -42,7 +42,7 @@ struct Seat {
             switch char {
             case "F", "L": return "0"
             case "B", "R": return "1"
-            default: fatalError()
+            default: fatalError("Invalid input")
             }
         }
         .joined()

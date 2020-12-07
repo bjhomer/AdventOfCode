@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Regex {
-    struct Match {
+public struct Regex {
+    public struct Match {
         private let result: NSTextCheckingResult
         private let string: NSString
 
@@ -17,8 +17,7 @@ struct Regex {
             self.string = str as NSString
         }
 
-        subscript(_ index: Int) -> String? {
-            guard index < result.numberOfRanges else { return nil }
+        public subscript(_ index: Int) -> String {
             let range = result.range(at: index)
             return string.substring(with: range)
         }
@@ -26,25 +25,32 @@ struct Regex {
 
     private var regex: NSRegularExpression
 
-    init(_ pattern: String)  {
+    public init(_ pattern: String)  {
         regex = try! NSRegularExpression(pattern: pattern)
     }
 
-    func matches(in optStr: String?) -> [Match] {
-        guard let str = optStr else { return [] }
+    public func matches<S>(in optStr: S?) -> [Match] where S: StringProtocol  {
+        guard let str = optStr.map(String.init(_:)) else { return [] }
         return regex
             .matches(in: str, range: NSRange(str.startIndex..., in: str))
             .map({ Match($0, in: str) })
     }
 
-    func match(_ optStr: String?) -> Match? {
+    public func match<S>(_ optStr: S?) -> Match? where S: StringProtocol {
         guard let str = optStr else { return nil }
         return self.matches(in: str).first
     }
 }
 
 extension Regex: ExpressibleByStringLiteral {
-    init(stringLiteral value: StringLiteralType) {
+    public init(stringLiteral value: StringLiteralType) {
         self.init(value)
     }
+}
+
+extension Regex.Match: Collection {
+    public func index(after i: Int) -> Int { i + 1 }
+
+    public var startIndex: Int { 0 }
+    public var endIndex: Int { result.numberOfRanges }
 }
