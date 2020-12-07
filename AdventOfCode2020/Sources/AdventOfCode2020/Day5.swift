@@ -1,11 +1,13 @@
 //
-//  Day5.swift
+//  Day6.swift
 //  
 //
 //  Created by BJ Homer on 12/5/20.
 //
 
 import Foundation
+import AdventCore
+
 
 func day5(input: Data) {
     let lines = String(decoding: input, as: UTF8.self)

@@ -12,13 +12,22 @@ import Algorithms
 
 
 func day7(input: String) {
-    let gates = input
+    var gates = input
         .split(separator: "\n")
         .map(Gate.init)
         .keyed(by: \.name)
 
     let part1 = gates["a"]!.value(in: gates)
     print("Part 1:", part1)
+
+    gates["a"]?.reset(in: gates)
+
+    let override = Gate("\(part1) -> b")
+    gates["b"] = override
+
+    let part2 = gates["a"]!.value(in: gates)
+    print("Part 2:", part2)
+
 }
 
 private class Gate {
@@ -71,12 +80,32 @@ private class Gate {
         else { fatalError("Bad Input") }
     }
 
-
+    func reset(in circuit: [String: Gate]) {
+        if _value == nil { return }
+        _value = nil
+        switch operation {
+        case .and(let aName, let bName):
+            if let a = circuit[aName] { a.reset(in: circuit) }
+            if let b = circuit[bName] { b.reset(in: circuit) }
+        case .or(let aName, let bName):
+            if let a = circuit[aName] { a.reset(in: circuit) }
+            if let b = circuit[bName] { b.reset(in: circuit) }
+        case .not(let aName):
+            if let a = circuit[aName] { a.reset(in: circuit) }
+        case .lshift(let aName, _):
+            if let a = circuit[aName] { a.reset(in: circuit) }
+        case .rshift(let aName, _):
+            if let a = circuit[aName] { a.reset(in: circuit) }
+        case .passthrough(let aName):
+            if let a = circuit[aName] { a.reset(in: circuit) }
+        case .const(_): break
+        }
+    }
 
     private var _value: UInt16?
 
     func value(`in` circuit: [String: Gate]) -> UInt16 {
-        print(name, "->", self.operation)
+//        print(name, "->", self.operation)
         if let value = _value { return value }
 
         let result: UInt16

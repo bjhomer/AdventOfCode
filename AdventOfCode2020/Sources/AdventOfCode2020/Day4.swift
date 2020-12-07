@@ -7,6 +7,7 @@
 
 import Foundation
 import Algorithms
+import AdventCore
 
 func day4_2(input inputData: Data) {
     let input = String(decoding: inputData, as: UTF8.self)
@@ -73,10 +74,11 @@ private struct Passport {
     var eyr: Int? { fields["eyr"].flatMap(Int.init) }
     var hgt: Height? {
         let regex = Regex(#"^(\d+)(in|cm)$"#)
-        guard let match = regex.match(fields["hgt"]),
-              let number = match[1].flatMap(Int.init),
-              let unit = match[2]
-              else { return nil }
+
+        guard let match = regex.match(fields["hgt"])
+        else { return nil }
+        let number = Int(match[1])!
+        let unit = match[2]
         return Height(number, unit: unit)
     }
     var hcl: String? {
