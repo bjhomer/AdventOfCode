@@ -7,57 +7,62 @@
 
 import Foundation
 import AdventCore
+import Algorithms
 
 func day7(input: Data) {
-    let rules = String(decoding: input, as: UTF8.self)
+    let bagTypes = String(decoding: input, as: UTF8.self)
         .split(separator: "\n")
-        .compactMap(Rule.init)
+        .compactMap(BagType.init)
 
-    let ruleDict: [String: Rule] = rules.keyed(by: \.bagType)
-    let invertedDict = ruleDict.invertedRules()
+    let catalog = LuggageCatalog(bagTypes: bagTypes)
+    let shinyGold = catalog.colorsToBagTypes["shiny gold"]!
+    let part1 = shinyGold.allPossibleContainers(using: catalog).count
+    print("Part 1:", part1)
 
-    var allContainers: Set<String> = []
-    var newProducts: Set<String> = ["shiny gold"]
 
-    while newProducts.isEmpty == false {
-        let producedThisRound = newProducts.flatMap { Set(invertedDict[$0] ?? []) }
-        allContainers.formUnion(producedThisRound)
-
-        newProducts = Set(producedThisRound)
-    }
-    print("Part 1:", allContainers.count)
-
-    let rule = ruleDict["shiny gold"]!
-
-    let insideMyBag = rule.contents(using: ruleDict)
+    let insideMyBag = shinyGold.contents(using: catalog)
     print("Part 2:", insideMyBag.count)
 
 
 }
 
-extension Dictionary where Key == String, Value == Rule {
-    func invertedRules() -> [String: [String]] {
-        var result: [String: [String]] = [:]
-        for (key, rule) in self {
-            let producedTypes = rule.products.map(\.type)
-
-            for producedType in producedTypes {
-                result[producedType, default: []].append(key)
-            }
+extension Dictionary  {
+    init<T>(groupedPairs: [(Key, T)]) where Value == [T] {
+        self = [:]
+        for pair in groupedPairs {
+            self[pair.0, default: []].append(pair.1)
         }
-        return result
     }
 }
 
 
-struct Rule {
+class LuggageCatalog {
+    var bagTypes: [BagType]
 
-    var bagType: String
-    var products: [ProducedBag]
+    init(bagTypes: [BagType]) {
+        self.bagTypes = bagTypes
+    }
 
-    init(bagType: String, produces: [ProducedBag]) {
-        self.bagType = bagType
-        self.products = produces
+    lazy var colorsToBagTypes: [String: BagType] = bagTypes.keyed(by: \.color)
+
+    lazy var colorToContainingColors: [String: [String]] = {
+        let innerOuterPairs = colorsToContainedColors.flatMap { (k, v) in product(v, [k]) }
+        return Dictionary(groupedPairs: innerOuterPairs)
+    }()
+
+    lazy var colorsToContainedColors: [String: [String]] = {
+        colorsToBagTypes.mapValues({ $0.contents.map(\.color) })
+    }()
+}
+
+struct BagType: Hashable {
+
+    var color: String
+    var contents: [ContainedBag]
+
+    init(bagType: String, produces: [ContainedBag]) {
+        self.color = bagType
+        self.contents = produces
     }
 
     //light red bags contain 1 bright white bag, 2 muted yellow bags.
@@ -66,42 +71,59 @@ struct Rule {
         let regex: Regex = #"(.+) bags contain (.+)\."#
         guard let match = regex.match(line) else { return nil }
 
-        self.bagType = match[1]
+        self.color = match[1]
 
         let containedString = match[2]
         switch containedString {
         case "no other bags":
-            products = []
+            contents = []
 
         case let things:
-            products = things
+            contents = things
                 .split(separator: ", ")
-                .compactMap { ProducedBag($0) }
+                .compactMap { ContainedBag($0) }
         }
     }
 
-    func contents(using rules: [String: Rule]) -> [String] {
-        let immediateBags = self.products
-            .reduce(into: [] as [String]) { (array, rule) in
-                array.append(contentsOf: rule.products)
+    func contents(using catalog: LuggageCatalog) -> [String] {
+        let immediateBags = self.contents.reduce(into: [] as [String]) {
+            (array, bag) in
+            array.append(contentsOf: bag.contents)
         }
 
+        let bagLookup = catalog.colorsToBagTypes
+
         return immediateBags +
-            immediateBags.flatMap { rules[$0]!.contents(using: rules) }
+            immediateBags.flatMap { bagLookup[$0]!.contents(using: catalog) }
+    }
+
+    func allPossibleContainers(using rules: LuggageCatalog) -> Set<String> {
+        let bagsByPossibleContainers = rules.colorToContainingColors
+
+        var knownContainers: Set<String> = []
+        var newlyAdded: Set<String> = [self.color]
+
+        while newlyAdded.isEmpty == false {
+            newlyAdded = Set(newlyAdded.flatMap { bagsByPossibleContainers[$0] ?? [] })
+            newlyAdded.subtract(knownContainers)
+
+            knownContainers.formUnion(newlyAdded)
+        }
+        return knownContainers
     }
 
 }
 
-struct ProducedBag {
+struct ContainedBag: Hashable {
     var count: Int
-    var type: String
+    var color: String
 
-    var products: [String] {
-        Array(repeating: type, count: count)
+    var contents: [String] {
+        Array(repeating: color, count: count)
     }
 
     init(type: String, count: Int = 1) {
-        self.type = type
+        self.color = type
         self.count = count
     }
 
@@ -111,7 +133,7 @@ struct ProducedBag {
         guard let match = regex.match(line) else { return nil }
 
         self.count = Int(match[1])!
-        self.type = match[2]
+        self.color = match[2]
     }
 }
 
