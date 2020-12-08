@@ -19,12 +19,16 @@ func day6(input: Data) {
     let part1 = groups.map(\.uniqueAnswers.count).reduce(0, +)
     print("Part 1:", part1)
 
+    let part2 = groups.map(\.commonAnswers.count).reduce(0, +
+    )
+    print("Part 2:", part2)
+
 }
 
 private struct Group {
     var lines: [String]
     init<C>(lines: C) where C: Collection, C.Element: StringProtocol {
-        self.lines = lines.map({ String($0) })
+        self.lines = lines.filter({ $0.isEmpty == false}).map({ String($0) })
     }
 
     var uniqueAnswers: Set<Character> {
@@ -32,11 +36,9 @@ private struct Group {
     }
 
     var commonAnswers: Set<Character> {
-        return []
-//        uniqueAnswers.filter {
-//            lines.allSatisfy({ $0.contains(})
-//
-//        }
+        let sets = lines.map(Set.init)
+        let commonAnswers = sets.reduce { return $0.intersection($1) }!
+        return commonAnswers
     }
 }
 

@@ -70,6 +70,13 @@ public extension Collection {
         }
         return dict
     }
+
+    func reduce(_ step: (Element, Element)->Element) -> Element? {
+        guard let initial = self.first else { return nil }
+        let remainder = self.dropFirst()
+
+        return remainder.reduce(initial, step)
+    }
 }
 
 public extension String {

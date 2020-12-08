@@ -11,7 +11,7 @@ import Foundation
 
 
 struct Advent: ParsableCommand {
-    @Argument(help: "Which day should we run?") var day: Int = 7
+    @Argument(help: "Which day should we run?") var day: Int = 6
 
     var inputFile: URL {
         let thisFile = URL(fileURLWithPath:#file)
