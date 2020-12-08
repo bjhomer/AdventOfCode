@@ -43,9 +43,13 @@ class LuggageCatalog {
         self.bagTypes = bagTypes
     }
 
+    subscript(_ color: String) -> BagType? {
+        return colorsToBagTypes[color]
+    }
+
     lazy var colorsToBagTypes: [String: BagType] = bagTypes.keyed(by: \.color)
 
-    lazy var colorToContainingColors: [String: [String]] = {
+    lazy var colorsToContainingColors: [String: [String]] = {
         let innerOuterPairs = colorsToContainedColors.flatMap { (k, v) in product(v, [k]) }
         return Dictionary(groupedPairs: innerOuterPairs)
     }()
@@ -91,14 +95,12 @@ struct BagType: Hashable {
             array.append(contentsOf: bag.contents)
         }
 
-        let bagLookup = catalog.colorsToBagTypes
-
         return immediateBags +
-            immediateBags.flatMap { bagLookup[$0]!.contents(using: catalog) }
+            immediateBags.flatMap { catalog[$0]!.contents(using: catalog) }
     }
 
     func allPossibleContainers(using rules: LuggageCatalog) -> Set<String> {
-        let bagsByPossibleContainers = rules.colorToContainingColors
+        let bagsByPossibleContainers = rules.colorsToContainingColors
 
         var knownContainers: Set<String> = []
         var newlyAdded: Set<String> = [self.color]
