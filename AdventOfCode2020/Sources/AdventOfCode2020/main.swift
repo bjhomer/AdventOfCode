@@ -11,7 +11,7 @@ import Foundation
 
 
 struct Advent: ParsableCommand {
-    @Argument(help: "Which day should we run?") var day: Int = 6
+    @Argument(help: "Which day should we run?") var day: Int = 8
 
     var inputFile: URL {
         let thisFile = URL(fileURLWithPath:#file)
@@ -37,6 +37,7 @@ struct Advent: ParsableCommand {
         case 5: day5(input: data)
         case 6: day6(input: data)
         case 7: day7(input: data)
+        case 8: day8(input: data)
         default:
             print("Unrecognized day")
         }

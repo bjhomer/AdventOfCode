@@ -146,9 +146,10 @@ private struct Instruction {
     init?<S>(_ line: S) where S: StringProtocol {
         let regex: Regex = #"^(toggle|turn on|turn off) (\d+),(\d+) through (\d+),(\d+)$"#
 
-        guard let match = regex.match(line) else { return nil }
+        guard let match = regex.match(line),
+              let (c, t, l, b, r) = match.dropFirst().explode()
+        else { return nil }
 
-        let (c, t, l, b, r) = match.dropFirst().explode()
         self.rect = Rect(top: Int(t)!, left: Int(l)!, bottom: Int(b)!, right: Int(r)!)
         self.command = Command(rawValue: c)!
     }

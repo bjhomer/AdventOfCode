@@ -45,7 +45,7 @@ private class Gate {
     }
 
     init<S>(_ line: S) where S: StringProtocol {
-        let (inst, name) = line.split(separator: " -> ").explode()
+        let (inst, name) = line.split(separator: " -> ").explode()!
         self.name = String(name)
 
         let andPattern: Regex = #"^(.+) AND (.+)$"#

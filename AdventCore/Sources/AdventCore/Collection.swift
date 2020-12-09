@@ -9,9 +9,9 @@ import Foundation
 
 public extension Collection {
 
-    func explode() -> (Element, Element) {
+    func explode() -> (Element, Element)? {
         let tupleCount = 2
-        assert(count >= tupleCount)
+        guard self.count == tupleCount else { return nil }
         let items = self.prefix(tupleCount)
         var itr = items.makeIterator()
         guard let a = itr.next(),
@@ -20,9 +20,9 @@ public extension Collection {
         return (a, b)
     }
 
-    func explode() -> (Element, Element, Element) {
+    func explode() -> (Element, Element, Element)? {
         let tupleCount = 3
-        assert(count >= tupleCount)
+        guard self.count == tupleCount else { return nil }
         let items = self.prefix(tupleCount)
         var itr = items.makeIterator()
         guard let a = itr.next(),
@@ -32,9 +32,9 @@ public extension Collection {
         return (a, b, c)
     }
 
-    func explode() -> (Element, Element, Element, Element) {
+    func explode() -> (Element, Element, Element, Element)? {
         let tupleCount = 4
-        assert(count >= tupleCount)
+        guard self.count == tupleCount else { return nil }
         let items = self.prefix(tupleCount)
         var itr = items.makeIterator()
         guard let a = itr.next(),
@@ -45,9 +45,9 @@ public extension Collection {
         return (a, b, c, d)
     }
 
-    func explode() -> (Element, Element, Element, Element, Element) {
+    func explode() -> (Element, Element, Element, Element, Element)? {
         let tupleCount = 5
-        assert(count >= tupleCount)
+        guard self.count == tupleCount else { return nil }
         let items = self.prefix(tupleCount)
         var itr = items.makeIterator()
         guard let a = itr.next(),

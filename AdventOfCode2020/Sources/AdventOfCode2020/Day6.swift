@@ -19,8 +19,7 @@ func day6(input: Data) {
     let part1 = groups.map(\.uniqueAnswers.count).reduce(0, +)
     print("Part 1:", part1)
 
-    let part2 = groups.map(\.commonAnswers.count).reduce(0, +
-    )
+    let part2 = groups.map(\.commonAnswers.count).reduce(0, +)
     print("Part 2:", part2)
 
 }
