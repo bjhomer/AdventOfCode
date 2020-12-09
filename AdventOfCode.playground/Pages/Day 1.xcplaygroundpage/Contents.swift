@@ -42,3 +42,8 @@ func part2() -> String {
 }
 
 part2()
+
+import AdventCore
+let (a, b, c) = [1, 2, 3].explode()!
+
+

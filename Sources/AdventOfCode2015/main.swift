@@ -6,8 +6,7 @@ struct Advent: ParsableCommand {
 
     var inputFile: URL {
         let thisFile = URL(fileURLWithPath:#file)
-        let sourcesDir = thisFile.deletingLastPathComponent().deletingLastPathComponent()
-        let inputsDir = sourcesDir.deletingLastPathComponent().appendingPathComponent("Inputs/")
+        let inputsDir = thisFile.deletingLastPathComponent().appendingPathComponent("Inputs/")
         let inputFile = inputsDir.appendingPathComponent("Day\(day).txt")
         return inputFile
     }

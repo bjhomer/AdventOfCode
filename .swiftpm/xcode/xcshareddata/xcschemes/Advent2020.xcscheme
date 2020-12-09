@@ -14,9 +14,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Advent"
-               BuildableName = "Advent"
-               BlueprintName = "Advent"
+               BlueprintIdentifier = "Advent2020"
+               BuildableName = "Advent2020"
+               BlueprintName = "Advent2020"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AdventCoreTests"
+               BuildableName = "AdventCoreTests"
+               BlueprintName = "AdventCoreTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,6 +42,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AdventCoreTests"
+               BuildableName = "AdventCoreTests"
+               BlueprintName = "AdventCoreTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -44,9 +68,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Advent"
-            BuildableName = "Advent"
-            BlueprintName = "Advent"
+            BlueprintIdentifier = "Advent2020"
+            BuildableName = "Advent2020"
+            BlueprintName = "Advent2020"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,9 +85,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Advent"
-            BuildableName = "Advent"
-            BlueprintName = "Advent"
+            BlueprintIdentifier = "Advent2020"
+            BuildableName = "Advent2020"
+            BlueprintName = "Advent2020"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
