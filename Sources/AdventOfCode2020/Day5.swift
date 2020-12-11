@@ -36,7 +36,7 @@ func day5(input: Data) {
 }
 
 
-struct Seat {
+private struct Seat {
     var number: Int
 
     init<S>(_ str: S) where S: StringProtocol {
