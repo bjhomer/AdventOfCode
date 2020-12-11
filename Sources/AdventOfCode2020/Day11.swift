@@ -192,14 +192,17 @@ private struct Grid: Equatable {
         }
         return copy
     }
+}
 
-    func print() {
+extension Grid: CustomStringConvertible {
 
-        for line in seats {
-            let chars = line.map { $0.rawValue }
-            let string = String(chars)
-            Swift.print(string)
+    var description: String {
+
+        return seats.map { (row) in
+            let chars = row.map { $0.rawValue }
+            return String(chars)
         }
+        .joined()
     }
 
 }
