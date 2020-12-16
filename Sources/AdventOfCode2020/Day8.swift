@@ -56,7 +56,7 @@ private func part2(_ program: Program) {
 }
 
 
-struct Instruction {
+private struct Instruction {
     enum OpCode: String {
         case acc
         case nop
@@ -90,7 +90,7 @@ struct Instruction {
     }
 }
 
-struct Program {
+private struct Program {
     var instructions: [Instruction]
 
     init(_ string: String) {
@@ -125,7 +125,7 @@ struct Program {
     }
 }
 
-extension Program {
+private extension Program {
     struct State {
         var pc: Int = 0
         var accumulator: Int = 0
