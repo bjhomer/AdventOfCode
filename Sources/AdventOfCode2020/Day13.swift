@@ -39,6 +39,7 @@ func day13(input: Data) {
 
 }
 
+// Part 1
 private func earliestBus(from buses: [Int], after earliestTime: Int) -> (bus: Int, wait: Int) {
     for time in (earliestTime...) {
         for bus in buses {
@@ -48,7 +49,10 @@ private func earliestBus(from buses: [Int], after earliestTime: Int) -> (bus: In
     fatalError("Never found a match")
 }
 
+
 /*
+ -- Part 2 --
+
  7,13,x,x,59,x,31,19
 
  t     % 7  == 0
@@ -65,11 +69,11 @@ private func earliestBus(from buses: [Int], after earliestTime: Int) -> (bus: In
 
  It would be nice if we could see when any particular pair of buses
  would coincide. For example, when will 7 and 13 coincide? We know
- this coincidence will have a period of LCM(7,13) = 91 minutes, and
+ this coincidence will have a period of lcm(7,13) = 91 minutes, and
  somewhere in that window is a moment when both 't % 7 == 0' and
  '(t+1) % 13 == 0' are true. We can use the larger of the two numbers
  to skip through the window looking for times that satisfy this
- constraint. (Are there better algorithms? This will suffice for now.)
+ constraint.
 
  Can we do better? Can we find when any particular _trio_ of buses
  will coincide? By definition, it must be time when any two of the
@@ -79,24 +83,23 @@ private func earliestBus(from buses: [Int], after earliestTime: Int) -> (bus: In
  just merging two. This scales indefinitely!
  */
 
+/// Represents a recurring event, which happens with period 'p', and offset that indicates
+/// where in that pattern this event occurs
 private struct Recurrence {
     var period: Int
     var offset: Int
-
-    func offset(by amount: Int) -> Recurrence {
-        return Recurrence(period: period, offset: (offset + amount)%period)
-    }
 
     func occurs(at time: Int) -> Bool {
         return (time + offset).positiveMod(period) == 0
     }
 
     /// Given two recurrences "a" and "b", they will form a repeating pattern
-    /// with its own period. At some time 't' within that pattern, they will occur
+    /// which has its *own* period. At some time 't' within that pattern, they will occur
     /// at (t + a.offset, t + b.offset).
     ///
     /// The return value has the period of their joint repeating pattern, and the
-    /// offset indicates where in that joint period that event happened
+    /// offset indicates where in that joint period that event happened. The result
+    ///
     static func jointRecurrence(_ a: Recurrence, _ b: Recurrence) -> Recurrence {
         let jointPeriod = lcm(a.period, b.period)
         let longerRecurrence = [a, b].max(by: { $0.period < $1.period })!
