@@ -14,7 +14,7 @@ func day13(input: Data) {
 
 //    let exampleString = """
 //    939
-//    1789,37,47,1889
+//    3,5,4
 //    """
 
     let lines = inputString
@@ -34,8 +34,7 @@ func day13(input: Data) {
     let busSchedule = BusSchedule(busSightings)
 
     let finalRecurrence = Recurrence.jointRecurrence(busSchedule.recurrences)
-
-    print("Part 2: \(-finalRecurrence.offset)")
+    print("Part 2: \(finalRecurrence.periodStartTime)")
 
 }
 
@@ -83,11 +82,16 @@ private func earliestBus(from buses: [Int], after earliestTime: Int) -> (bus: In
  just merging two. This scales indefinitely!
  */
 
-/// Represents a recurring event, which happens with period 'p', and offset that indicates
-/// where in that pattern this event occurs
+/// Represents a recurring event that occurs relative to a time 't', satisfying
+/// `(t+offset) % period == 0`. 
 private struct Recurrence {
     var period: Int
     var offset: Int
+
+    var periodStartTime: Int {
+        let positiveOffset = (offset).positiveMod(period)
+        return period - positiveOffset
+    }
 
     func occurs(at time: Int) -> Bool {
         return (time + offset).positiveMod(period) == 0
@@ -107,7 +111,7 @@ private struct Recurrence {
         let strideOffset = longerRecurrence.offset
 
 
-        let occurrenceTime = stride(from: 0, to: jointPeriod, by: stridePeriod)
+        let occurrenceTime = stride(from: 0, through: jointPeriod, by: stridePeriod)
             .first(where: { (time) in
                     let baseTime = time - strideOffset
                     return a.occurs(at: baseTime) && b.occurs(at: baseTime) }
@@ -119,8 +123,10 @@ private struct Recurrence {
             - longerRecurrence.offset
 
 
-        // If the event happened at time 45, then that means that (t-45) % N == 0
-        let jointOffset = -occurrenceTime
+        // If the event happened at time 45 with a period of 55, then that means
+        // that (t-45) % 55 == 0. We'd prefer to have a positive offset, though,
+        // so we return (t+10) % 55 == 0, which is equivalent.
+        let jointOffset = (-occurrenceTime).positiveMod(jointPeriod)
         return Recurrence(period: jointPeriod, offset: jointOffset)
     }
 

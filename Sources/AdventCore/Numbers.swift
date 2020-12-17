@@ -12,7 +12,7 @@ extension Int {
     public func positiveMod(_ divisor: Int) -> Int {
         if self >= 0 { return self % abs(divisor) }
         else {
-            let amountToAdd = abs(self/divisor)+4
+            let amountToAdd = abs(self/divisor)+divisor
             return self + amountToAdd
         }
     }
