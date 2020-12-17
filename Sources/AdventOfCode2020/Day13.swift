@@ -102,10 +102,6 @@ private struct Recurrence {
     /// Given two recurrences "a" and "b", they will form a repeating pattern
     /// which has its *own* period. At some time 't' within that pattern, they will occur
     /// at (t + a.offset, t + b.offset).
-    ///
-    /// The return value has the period of their joint repeating pattern, and the
-    /// offset indicates where in that joint period that event happened. The result
-    ///
     static func jointRecurrence(_ a: Recurrence, _ b: Recurrence) -> Recurrence {
         let jointPeriod = lcm(a.period, b.period)
         let longerRecurrence = [a, b].max(by: { $0.period < $1.period })!
