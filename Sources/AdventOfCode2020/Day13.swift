@@ -82,18 +82,20 @@ private func earliestBus(from buses: [Int], after earliestTime: Int) -> (bus: In
  just merging two. This scales indefinitely!
  */
 
-/// Represents a recurring event that occurs relative to a time 't', satisfying
-/// `(t+offset) % period == 0`. 
+/// Represents a recurring event that occurs relative to some other time 't', satisfying
+/// `(t+offset) % period == 0`.
 private struct Recurrence {
     var period: Int
     var offset: Int
 
+    /// If this recurrence starts 'offset' units after 't', when is the earliest positive time
+    /// that 't' could be?
     var periodStartTime: Int {
         let positiveOffset = (offset).positiveMod(period)
         return period - positiveOffset
     }
 
-    func occurs(at time: Int) -> Bool {
+    func occurs(relativeTo time: Int) -> Bool {
         return (time + offset).positiveMod(period) == 0
     }
 
@@ -114,7 +116,7 @@ private struct Recurrence {
         let occurrenceTime = stride(from: 0, through: jointPeriod, by: stridePeriod)
             .first(where: { (time) in
                     let baseTime = time - strideOffset
-                    return a.occurs(at: baseTime) && b.occurs(at: baseTime) }
+                    return a.occurs(relativeTo: baseTime) && b.occurs(relativeTo: baseTime) }
             )!
             // We're taking steps via the larger stride, but the times we need to evaluate
             // need to be adjusted by the offset of this larger stride.
