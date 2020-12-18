@@ -30,6 +30,8 @@ func day17(input inputData: Data) {
 //    #.......
 //    """
 
+    let start = Date()
+
     let input = realInput
 
     var space3d = SparseSpace<Point3D>(input)
@@ -49,79 +51,38 @@ func day17(input inputData: Data) {
 
     let part2 = space4d.activeCount
     print("Part 2: \(part2)")
+
+    let interval = Date().timeIntervalSince(start)
+    print(String(format: "time: %0.2f", interval))
 }
+
 
 protocol DimensionalPoint: Hashable {
-    var neighbors: [Self] { get }
+    static var zero: Self { get }
 
-    init(x: Int, y: Int)
+    typealias IntPath = WritableKeyPath<Self, Int>
+    static var paths: [IntPath] { get }
 }
+
 
 struct Point3D: DimensionalPoint {
     var x: Int
     var y: Int
     var z: Int
 
-    init(x: Int, y: Int) {
-        self.init(x: x, y: y, z: 0)
-    }
-
-    init(x: Int, y: Int, z: Int = 0) {
-        self.x = x
-        self.y = y
-        self.z = z
-    }
-
-    var neighbors: [Point3D] {
-        var result: [Point3D] = []
-        for x in -1...1 {
-            for y in -1...1 {
-                for z in -1...1 {
-                    if x == 0 && y == 0 && z == 0 { continue }
-                    result.append(Point3D(x: self.x + x,
-                                          y: self.y + y,
-                                          z: self.z + z))
-                }
-            }
-        }
-        return result
-    }
+    static var paths: [IntPath] =  [\.x, \.y, \.z]
+    static let zero = Point3D(x: 0, y: 0, z: 0)
 }
 
 struct Point4D: DimensionalPoint {
+
     var x: Int
     var y: Int
     var z: Int
     var w: Int
 
-    init(x: Int, y: Int) {
-        self.init(x: x, y: y, z: 0)
-    }
-
-    init(x: Int, y: Int, z: Int = 0, w: Int = 0) {
-        self.x = x
-        self.y = y
-        self.z = z
-        self.w = w
-    }
-
-    var neighbors: [Point4D] {
-        var result: [Point4D] = []
-        for x in -1...1 {
-            for y in -1...1 {
-                for z in -1...1 {
-                    for w in -1...1 {
-                        if x == 0 && y == 0 && z == 0 && w == 0 { continue }
-                        result.append(Point4D(x: self.x + x,
-                                              y: self.y + y,
-                                              z: self.z + z,
-                                              w: self.w + w))
-                    }
-                }
-            }
-        }
-        return result
-    }
+    static let paths: [IntPath] = [\.x, \.y, \.z, \.w]
+    static let zero = Point4D(x: 0, y: 0, z: 0, w: 0)
 }
 
 struct SparseSpace<T: DimensionalPoint> {
@@ -131,10 +92,11 @@ struct SparseSpace<T: DimensionalPoint> {
 
         self.activePoints = string.split(separator: "\n")
             .enumerated()
-            .flatMap { (lineNumber, line) in
-                line.enumerated().compactMap {
-                    $0.1 == "#"
-                        ? T(x: $0.0, y: lineNumber)
+            .flatMap { (y, line) in
+                line.enumerated()
+                    .compactMap { (x, char) in
+                    char == "#"
+                        ? T([x, y])
                         : nil
                 }
             }
@@ -180,3 +142,75 @@ struct SparseSpace<T: DimensionalPoint> {
             .count
     }
 }
+
+
+
+extension DimensionalPoint {
+
+    /**
+     Creates a point given a sequence of values. Each value is assigned in the order
+     specified by the `paths` static property. Any remaining properties are left at 0
+     */
+    init(_ values: [Int]) {
+        self.init(zip(Self.paths, values))
+    }
+
+    /**
+     Creates a point given a sequece of path-value pairs. Any unspecified paths
+     are left at zero
+
+     For example, a 3-dimensional point could be created like this:
+     ```
+     Point3D([\.x: 3, \.y: 4, \.z: 7])
+     ```
+     */
+    init<PathsAndValues>(_ pairs: PathsAndValues) where
+        PathsAndValues: Sequence,
+        PathsAndValues.Element == (IntPath, Int)
+    {
+        self = .zero
+        for (path, x) in pairs {
+            self[keyPath: path] = x
+        }
+    }
+
+    /// Produces an array of all neighboring points to this point, including "hyper-diagonals"
+    var neighbors: [Self] {
+        let paths = Self.paths
+        let myValues = paths.map { self[keyPath: $0] }
+        let possibleOffsets = neighborOffsets(dimensionCount: paths.count)
+        let neighborValues = possibleOffsets.map { (offsets) in zip(myValues, offsets).map { $0.0 + $0.1 } }
+        let points = neighborValues.map { (values) in Self(zip(paths, values)) }
+        return points
+    }
+}
+
+
+/// Returns all possible offsets that can be applied to find the neighbors of a point.
+///
+/// In 2 dimensions, this would produce:
+/// ```
+/// [
+///   [-1, -1],
+///   [-1,  0],
+///   [-1,  1],
+///   [ 0, -1],
+///   [ 0,  1],
+///   [ 1, -1],
+///   [ 1,  0],
+///   [ 1,  1],
+/// ]
+/// ```
+///
+/// Note that the `[0, 0]` offset is not present, as appllying that offset
+/// would not produce a neighbor.
+///
+private func neighborOffsets(dimensionCount count: Int) -> [[Int]] {
+    if let cached = _neighborOffsetsByDimension[count] { return cached }
+    let result = [-1, 0, 1]
+        .combinationsWithReplacement(count: count)
+        .filter { !($0.allSatisfy{ $0 == 0 }) }
+    _neighborOffsetsByDimension[count] = result
+    return result
+}
+private var _neighborOffsetsByDimension: [Int: [[Int]] ] = [:]

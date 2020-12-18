@@ -77,6 +77,16 @@ public extension Collection {
 
         return remainder.reduce(initial, step)
     }
+
+    func combinationsWithReplacement(count: Int) -> [[Element]] {
+        if count == 0 { return [[]] }
+
+        return self.flatMap { (head) in
+            combinationsWithReplacement(count: count - 1)
+                .map { [head] + $0 }
+        }
+    }
+
 }
 
 public extension String {
