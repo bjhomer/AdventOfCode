@@ -181,7 +181,7 @@ extension DimensionalPoint {
         let possibleOffsets = neighborOffsets(dimensionCount: paths.count)
         let neighborValues = possibleOffsets.map { (offsets) in zip(myValues, offsets).map { $0.0 + $0.1 } }
         let points = neighborValues.map { (values) in Self(zip(paths, values)) }
-        return points
+        return Array(points)
     }
 }
 

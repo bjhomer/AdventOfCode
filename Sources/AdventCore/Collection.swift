@@ -86,7 +86,6 @@ public extension Collection {
                 .map { [head] + $0 }
         }
     }
-
 }
 
 public extension String {
