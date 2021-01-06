@@ -29,6 +29,24 @@
         }
       },
       {
+        "package": "swift-se0270-range-set",
+        "repositoryURL": "https://github.com/apple/swift-se0270-range-set",
+        "state": {
+          "branch": null,
+          "revision": "120fc7efe17b11f7eedd94e7a5e1885fc69efb49",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "swift-standard-library-preview",
+        "repositoryURL": "https://github.com/apple/swift-standard-library-preview.git",
+        "state": {
+          "branch": null,
+          "revision": "833ea174a771bdc98edfa3529ae05439564e3902",
+          "version": "0.0.1"
+        }
+      },
+      {
         "package": "SwiftGraph",
         "repositoryURL": "https://github.com/davecom/SwiftGraph",
         "state": {

@@ -18,7 +18,8 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "0.3.0")),
         .package(url: "https://github.com/apple/swift-algorithms", .upToNextMajor(from: "0.0.1")),
-        .package(url: "https://github.com/davecom/SwiftGraph", .upToNextMajor(from: "3.0.0"))
+        .package(url: "https://github.com/davecom/SwiftGraph", .upToNextMajor(from: "3.0.0")),
+        .package(url: "https://github.com/apple/swift-standard-library-preview.git", from: "0.0.1"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -28,6 +29,7 @@ let package = Package(
                     .target(name: "AdventCore"),
                     .product(name: "ArgumentParser", package: "swift-argument-parser"),
                     .product(name: "Algorithms", package: "swift-algorithms"),
+                    .product(name: "StandardLibraryPreview", package: "swift-standard-library-preview"),
                 ],
                 exclude: ["Inputs"]),
         .target(name: "AdventOfCode2015",

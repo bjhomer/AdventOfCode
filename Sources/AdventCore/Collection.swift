@@ -88,19 +88,6 @@ public extension Collection {
     }
 }
 
-public extension String {
-    func split<Str>(separator: Str) -> [SubSequence]
-    where Str: StringProtocol
-    {
-        if separator.count == 1 {
-            return split(separator: separator.first!)
-        }
-        else {
-            return self.splitImpl(separator: separator)
-        }
-    }
-}
-
 public extension Collection where Element: Equatable {
     func split<C>(separator: C) -> [Self.SubSequence]
     where C: Collection, C.Element == Element
@@ -108,7 +95,7 @@ public extension Collection where Element: Equatable {
         return splitImpl(separator: separator)
     }
 
-    fileprivate func splitImpl<C>(separator: C) -> [Self.SubSequence]
+    internal func splitImpl<C>(separator: C) -> [Self.SubSequence]
     where C: Collection, C.Element == Element
     {
         guard let firstNeedle = separator.first else { return [self[...]] }
