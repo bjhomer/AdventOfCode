@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AsyncAlgorithms
 
 public extension Collection {
 
@@ -86,6 +87,12 @@ public extension Collection {
                 .map { [head] + $0 }
         }
     }
+
+
+    func print() -> Self {
+        Swift.print(self)
+        return self
+    }
 }
 
 public extension Collection where Element: Equatable {
@@ -122,3 +129,54 @@ public extension Collection where Element: Equatable {
     }
 }
 
+extension Sequence {
+    public func sorted<T: Comparable>(on block: (Element)->T) -> [Element] {
+        return self.sorted(by: { block($0) < block($1) })
+    }
+}
+
+extension Sequence {
+    public func collect() -> [Element] {
+        return Array(self)
+    }
+}
+
+extension AsyncSequence {
+    public func collect() async rethrows -> [Element] {
+        var result: [Element] = []
+        for try await x in self {
+            result.append(x)
+        }
+        return result
+    }
+
+    public func print() async throws -> AsyncLazySequence<[Element]> {
+        let items = try await self.collect()
+        Swift.print(items)
+        return items.async
+    }
+}
+
+extension AsyncSequence where Element: Equatable {
+    public func split(separator: Element) async -> AsyncThrowingStream<[Element], Error> {
+        var iterator = self.makeAsyncIterator()
+
+        return AsyncThrowingStream {
+            var items: [Element] = []
+            while let item = try await iterator.next() {
+                if item == separator {
+                    return items
+                }
+                else {
+                    items.append(item)
+                }
+            }
+            if items.count > 0 {
+                return items
+            }
+            else {
+                return nil
+            }
+        }
+    }
+}

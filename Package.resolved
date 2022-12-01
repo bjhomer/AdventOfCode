@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/apple/swift-algorithms",
         "state": {
           "branch": null,
-          "revision": "bb3bafeca0e164ece3403a9de646b7d38c07dd49",
-          "version": "0.0.2"
+          "revision": "b14b7f4c528c942f121c8b860b9410b2bf57825e",
+          "version": "1.0.0"
         }
       },
       {
@@ -15,8 +15,17 @@
         "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
           "branch": null,
-          "revision": "92646c0cdbaca076c8d3d0207891785b3379cbff",
-          "version": "0.3.1"
+          "revision": "fddd1c00396eed152c45a46bea9f47b98e59301d",
+          "version": "1.2.0"
+        }
+      },
+      {
+        "package": "AsyncAlgorithms",
+        "repositoryURL": "https://github.com/apple/swift-async-algorithms",
+        "state": {
+          "branch": null,
+          "revision": "cca423ff03ab657062f3781847e65a867b51bb01",
+          "version": "0.0.3"
         }
       },
       {
@@ -24,8 +33,8 @@
         "repositoryURL": "https://github.com/apple/swift-numerics",
         "state": {
           "branch": null,
-          "revision": "6b24333510e9044cf4716a07bed65eeed6bc6393",
-          "version": "0.0.8"
+          "revision": "0a5bc04095a675662cf24757cc0640aa2204253b",
+          "version": "1.0.2"
         }
       },
       {
@@ -38,12 +47,21 @@
         }
       },
       {
+        "package": "swift-se0288-is-power",
+        "repositoryURL": "https://github.com/apple/swift-se0288-is-power",
+        "state": {
+          "branch": null,
+          "revision": "f85a3e4624c5de4294f2644ffb111dbc974d4bab",
+          "version": "2.0.0"
+        }
+      },
+      {
         "package": "swift-standard-library-preview",
         "repositoryURL": "https://github.com/apple/swift-standard-library-preview.git",
         "state": {
           "branch": null,
-          "revision": "833ea174a771bdc98edfa3529ae05439564e3902",
-          "version": "0.0.1"
+          "revision": "6f72db4c56431d2a2aba0ea41697f60f7cd5917e",
+          "version": "0.0.3"
         }
       },
       {

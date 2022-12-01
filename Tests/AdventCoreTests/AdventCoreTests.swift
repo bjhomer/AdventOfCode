@@ -1,5 +1,6 @@
 import XCTest
 @testable import AdventCore
+import AsyncAlgorithms
 
 final class AdventCoreTests: XCTestCase {
     func testExample() {
@@ -13,6 +14,15 @@ final class AdventCoreTests: XCTestCase {
         XCTAssert(pieces[1] == "678")
         XCTAssert(pieces[2] == "910")
 
+    }
+
+    func testSplitAsyncSequence() async throws {
+        let sequences = try await [10, 20, 30, 0, 20, 30, 40, 0, 20]
+            .async
+            .split(separator: 0)
+            .collect()
+
+        XCTAssertEqual(sequences, [[10, 20, 30], [20, 30, 40], [20]])
     }
 
     static var allTests = [
