@@ -32,7 +32,8 @@ let package = Package(
                             .target(name: "AdventCore"),
                             .product(name: "ArgumentParser", package: "swift-argument-parser"),
                             .product(name: "Algorithms", package: "swift-algorithms"),
-                            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
+                            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+                            .product(name: "StandardLibraryPreview", package: "swift-standard-library-preview"),
                           ],
                           exclude: ["Inputs"]),
         .executableTarget(name: "AdventOfCode2021",
