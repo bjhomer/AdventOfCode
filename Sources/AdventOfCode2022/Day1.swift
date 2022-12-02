@@ -11,7 +11,7 @@ import AdventCore
 
 
 
-struct Day1 {
+struct Day1: Day {
     private var elves: [Elf]
 
     init(input: URL) async {
