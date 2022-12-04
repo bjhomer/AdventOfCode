@@ -9,8 +9,8 @@ import Algorithms
 import AdventCore
 
 func day1(input: URL) {
-    await day1part1(input: input)
-    await day1part2(input: input)
+    day1part1(input: input)
+    day1part2(input: input)
 }
 
 private func day1part1(input: URL)  {
