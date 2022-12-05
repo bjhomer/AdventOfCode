@@ -87,7 +87,10 @@ public extension Collection {
                 .map { [head] + $0 }
         }
     }
-
+    
+    func divided(at index: Index) -> (head: SubSequence, tail: SubSequence) {
+        return (self[..<index], self[index...])
+    }
 
     func print() -> Self {
         Swift.print(self)

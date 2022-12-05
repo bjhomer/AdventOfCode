@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RegexBuilder
 
 struct Day4: Day {
 
