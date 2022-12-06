@@ -91,6 +91,10 @@ public extension Collection {
     func divided(at index: Index) -> (head: SubSequence, tail: SubSequence) {
         return (self[..<index], self[index...])
     }
+    
+    func offset(of index: Index) -> Int {
+        distance(from: startIndex, to: index)
+    }
 
     func print() -> Self {
         Swift.print(self)
