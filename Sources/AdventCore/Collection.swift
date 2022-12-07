@@ -102,6 +102,13 @@ public extension Collection {
     }
 }
 
+public extension Collection where Self == SubSequence {
+    mutating func popFirst() -> Element? {
+        if isEmpty { return nil }
+        return removeFirst()
+    }
+}
+
 public extension Collection where Element: Equatable {
     func split<C>(separator: C) -> [Self.SubSequence]
     where C: Collection, C.Element == Element
@@ -133,6 +140,12 @@ public extension Collection where Element: Equatable {
         }
         results.append(self[startMatch...])
         return results
+    }
+}
+
+public extension Collection where Element: Hashable {
+    var allUnique: Bool {
+        return Set(self).count == self.count
     }
 }
 
