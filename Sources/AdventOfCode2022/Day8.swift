@@ -23,13 +23,10 @@ struct Day8: Day {
     }
     
     func part1() async {
-        var visibleCount: Int = 0
 
-        for index in grid.indices {
-            if grid.isVisible(row: index.r, column: index.c) {
-                visibleCount += 1
-            }
-        }
+        let visibleCount = grid.indices
+            .filter( { grid.isVisible(row: $0.r, column: $0.c) })
+            .count
         print(visibleCount)
     }
     
