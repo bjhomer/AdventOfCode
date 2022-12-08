@@ -25,8 +25,8 @@ struct Day8: Day {
     func part1() async {
         var visibleCount: Int = 0
 
-        for (r, c) in product(0..<grid.width, 0..<grid.height) {
-            if grid.isVisible(row: r, column: c) {
+        for index in grid.indices {
+            if grid.isVisible(row: index.r, column: index.c) {
                 visibleCount += 1
             }
         }
@@ -34,8 +34,8 @@ struct Day8: Day {
     }
     
     func part2() async {
-        let result = product(0..<grid.width, 0..<grid.height)
-            .map { (i, j) in (i, j, grid.scenicScore(row: i, column: j)) }
+        let result = grid.indices
+            .map { (r, c) in (r, c, grid.scenicScore(row: r, column: c)) }
             .sorted(on: \.2)
             .reversed()
             .first!
@@ -68,6 +68,8 @@ extension Grid<Int> {
 }
 
 private struct Grid<T> {
+    typealias Index = (r: Int, c: Int)
+
     private var rows: [[T]]
 
     init(rows: [[T]]) {
@@ -76,6 +78,10 @@ private struct Grid<T> {
 
     var width: Int { rows[0].count }
     var height: Int { rows[0].count }
+
+    var indices: [Index] {
+        return Array(product(0..<height, 0..<width))
+    }
 
     subscript(row r: Int, column c: Int) -> T {
         get { rows[r][c] }
