@@ -76,7 +76,7 @@ private struct Grid<T> {
     }
 
     var width: Int { rows[0].count }
-    var height: Int { rows[0].count }
+    var height: Int { rows.count }
 
     var indices: [Index] {
         return Array(product(0..<height, 0..<width))
