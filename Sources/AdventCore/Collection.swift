@@ -91,6 +91,11 @@ public extension Collection {
     func divided(at index: Index) -> (head: SubSequence, tail: SubSequence) {
         return (self[..<index], self[index...])
     }
+
+    func divided(around index: Index) -> (head: SubSequence, tail: SubSequence) {
+        let after = self.index(after: index)
+        return (self[..<index], self[after...])
+    }
     
     func offset(of index: Index) -> Int {
         distance(from: startIndex, to: index)
@@ -99,6 +104,15 @@ public extension Collection {
     func print() -> Self {
         Swift.print(self)
         return self
+    }
+
+    func prefixThroughFirst(where predicate: (Element) -> Bool) -> SubSequence {
+        if let index = firstIndex(where: predicate) {
+            return prefix(through: index)
+        }
+        else {
+            return prefix(self.count)
+        }
     }
 }
 
