@@ -150,6 +150,7 @@ private struct RopeSegment {
             let deltaR = head.row - tail.row
             let deltaC = head.column - tail.column
 
+            // signum() is the sign of the number. 1 for positive, -1 for negative, 0 for zero
             tail.column += deltaC.signum()
             tail.row += deltaR.signum()
         }
