@@ -7,6 +7,7 @@
 
 import Foundation
 import Algorithms
+import AdventCore
 
 struct Day8: Day {
 
@@ -64,34 +65,4 @@ extension Grid<Int> {
         return result
     }
 
-}
-
-private struct Grid<T> {
-    typealias Index = (r: Int, c: Int)
-
-    private var rows: [[T]]
-
-    init(rows: [[T]]) {
-        self.rows = rows
-    }
-
-    var width: Int { rows[0].count }
-    var height: Int { rows.count }
-
-    var indices: [Index] {
-        return Array(product(0..<height, 0..<width))
-    }
-
-    subscript(row r: Int, column c: Int) -> T {
-        get { rows[r][c] }
-        set { rows[r][c] = newValue }
-    }
-
-    subscript(column c: Int) -> [T] {
-        rows.map { $0[c] }
-    }
-
-    subscript(row r: Int) -> [T] {
-        rows[r]
-    }
 }
