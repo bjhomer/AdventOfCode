@@ -83,7 +83,7 @@ private class Machine {
 
         func print() {
             for line in pixels.chunks(ofCount: columnCount) {
-                let chars = line.map { $0 ? "#" : "." }.joined()
+                let chars = line.map { $0 ? "#" : " " }.joined()
                 Swift.print(chars)
             }
         }
