@@ -123,6 +123,19 @@ public extension Collection where Self == SubSequence {
     }
 }
 
+public extension RangeReplaceableCollection {
+
+    @discardableResult
+    mutating func popFirst() -> Element? {
+        if isEmpty { return nil }
+        let index = self.startIndex
+
+        let item = self[index]
+        remove(at: index)
+        return item
+    }
+}
+
 public extension Collection where Element: Equatable {
     func split<C>(separator: C) -> [Self.SubSequence]
     where C: Collection, C.Element == Element

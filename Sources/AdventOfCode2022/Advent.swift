@@ -10,7 +10,7 @@ import ArgumentParser
 import Foundation
 
 let days: [Day.Type] = [Day1.self, Day2.self, Day3.self, Day4.self, Day5.self, Day6.self, Day7.self, Day8.self,
-                        Day9.self]
+                        Day9.self, Day10.self]
 
 @main
 struct Advent: AsyncParsableCommand {
@@ -18,7 +18,7 @@ struct Advent: AsyncParsableCommand {
     var sample = false
 
     @Argument(help: "Which day should we run?")
-    var day: Int = 9
+    var day: Int = 10
 
     var inputFile: URL { sample ? sampleFile : problemFile }
 
