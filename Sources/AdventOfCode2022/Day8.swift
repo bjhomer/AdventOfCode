@@ -33,7 +33,7 @@ struct Day8: Day {
     
     func part2() async {
         let result = grid.indices
-            .map { (r, c) in (r, c, grid.scenicScore(row: r, column: c)) }
+            .map { i in (i.r, i.c, grid.scenicScore(row: i.r, column: i.c)) }
             // All the below could just be `.max()!`, but I wanted to be able to see
             // which item it picked.
             .sorted(on: \.2)

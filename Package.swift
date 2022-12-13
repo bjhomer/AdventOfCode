@@ -23,6 +23,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-async-algorithms", .upToNextMajor(from: "0.0.3")),
         .package(url: "https://github.com/davecom/SwiftGraph", .upToNextMajor(from: "3.0.0")),
         .package(url: "https://github.com/apple/swift-standard-library-preview.git", from: "0.0.3"),
+        .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -34,6 +35,8 @@ let package = Package(
                             .product(name: "Algorithms", package: "swift-algorithms"),
                             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
                             .product(name: "StandardLibraryPreview", package: "swift-standard-library-preview"),
+                            .product(name: "SwiftGraph", package: "SwiftGraph"),
+                            .product(name: "Collections", package: "swift-collections")
                           ],
                           exclude: ["Inputs"]),
         .executableTarget(name: "AdventOfCode2021",
