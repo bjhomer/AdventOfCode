@@ -60,6 +60,22 @@ public extension Collection {
         return (a, b, c, d, e)
     }
 
+    func explode() -> (Element, Element, Element, Element, Element, Element)? {
+        let tupleCount = 6
+        guard self.count == tupleCount else { return nil }
+        let items = self.prefix(tupleCount)
+        var itr = items.makeIterator()
+        guard let a = itr.next(),
+              let b = itr.next(),
+              let c = itr.next(),
+              let d = itr.next(),
+              let e = itr.next(),
+              let f = itr.next()
+        else { fatalError() }
+        return (a, b, c, d, e, f)
+    }
+
+
     var fullRange: Range<Index> { startIndex..<endIndex }
 
     func keyed<T>(by keyFunc: (Element)->T) -> [T: Element]
@@ -167,6 +183,13 @@ public extension Collection where Element: Equatable {
         }
         results.append(self[startMatch...])
         return results
+    }
+
+    func suffix(afterFirst separator: some Collection<Element>) -> SubSequence {
+        guard let startIndex = self.split(separator: separator).dropFirst().first?.startIndex
+        else { return self[endIndex..<endIndex] }
+
+        return self[startIndex...]
     }
 }
 
