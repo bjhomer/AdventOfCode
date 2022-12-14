@@ -55,7 +55,7 @@ struct Day14: Day {
             grid[floor] = "o"
             count += 1
         }
-        print(grid)
+//        print(grid)
         print(count)
     }
 }
@@ -174,7 +174,7 @@ private extension SparseGrid {
 
     func topOccupiedIndex(below index: Index) -> Index? {
         guard let column = columns[index.c],
-              let row = column.keys.filter({ $0 > index.r }).min()
+              let row = column.keys.lazy.filter({ $0 > index.r }).min()
         else { return nil }
 
         return Index(r: row, c: index.c)
