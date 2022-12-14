@@ -12,6 +12,11 @@ public struct Grid<T> {
         public var r: Int
         public var c: Int
 
+        public init(r: Int, c: Int) {
+            self.r = r
+            self.c = c
+        }
+
         func offset(by delta: (r: Int, c: Int)) -> Index {
             return Index(r: r + delta.r, c: c + delta.c)
         }
