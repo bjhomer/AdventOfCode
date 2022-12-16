@@ -38,24 +38,20 @@ struct Day15: Day {
     func part2() async {
         let scale = isSample ? 20 : 4000000
 
-        let start = Date()
-        for r in 0...scale {
-            var rangeSet = RangeSet([Range(0...scale)])
-
-            for reading in readings {
-                if let eliminatedRange = reading.eliminatedRange(row: r) {
-                    rangeSet.remove(contentsOf: Range(eliminatedRange))
+    outer:
+        for reading in readings {
+            for point in reading.pointsSurroundingArea() {
+                if 0...scale ~= point.x,
+                   0...scale ~= point.y,
+                   readings.allSatisfy({ $0.eliminatesBeacon(at: point) == false }) {
+                    // we found it!
+                    let frequency = (point.x * scale + point.y)
+                    print(frequency)
+                    break outer
                 }
             }
-            if rangeSet.count == 1 {
-                let c = rangeSet.values.first!
-                print(c, r)
-                print(c * scale + r)
-                break
-            }
         }
-        print(Date().timeIntervalSince(start))
-        print("done")
+
 
     }
 }
@@ -85,6 +81,22 @@ private struct SensorReading {
         if columnDelta < 0 { return nil }
         let result = (location.c - columnDelta)...(location.c + columnDelta)
         return result
+    }
+
+    func pointsSurroundingArea() -> [GridPoint] {
+        var points: [GridPoint] = []
+
+        let minX = location.x - distanceToBeacon - 1
+        let maxX = location.x + distanceToBeacon + 1
+        for x in minX...maxX {
+            // There are two possible y positions for each x
+            let delta = (distanceToBeacon + 1) - abs(x - location.x)
+            let y1 = location.y + delta
+            let y2 = location.y - delta
+            points.append(GridPoint(x: x, y: y1))
+            points.append(GridPoint(x: x, y: y2))
+        }
+        return points
     }
 }
 
