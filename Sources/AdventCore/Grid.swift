@@ -51,7 +51,7 @@ public struct GridPoint: Hashable, Codable, CustomStringConvertible {
     }
 
     public var description: String {
-        "(r:\(r), c:\(c))"
+        "(r\(r), c\(c))"
     }
 }
 
