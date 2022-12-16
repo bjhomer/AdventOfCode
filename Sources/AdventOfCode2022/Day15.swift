@@ -7,6 +7,7 @@
 
 import Foundation
 import AdventCore
+import SE0270_RangeSet
 
 struct Day15: Day {
 
@@ -18,34 +19,43 @@ struct Day15: Day {
     }
 
     func part1() async {
-        let minX = readings.map { $0.location.x - $0.distanceToBeacon }.min()!
-        let maxX = readings.map { $0.location.x + $0.distanceToBeacon }.max()!
-        let minY = readings.map { $0.location.y - $0.distanceToBeacon }.min()!
-        let maxY = readings.map { $0.location.y + $0.distanceToBeacon }.max()!
+        let rowToRead = (isSample ? 10 : 2000000)
 
-        let topLeft = GridPoint(x: minX, y: minY)
-        let bottomRight = GridPoint(x: maxX, y: maxY)
-
-        var grid = Grid<Character>(topLeft: topLeft, bottomRight: bottomRight, defaultValue: ".")
+        var rangeSet = RangeSet<Int>()
 
         for reading in readings {
-            grid[reading.location] = "S"
-            grid[reading.nearestBeacon] = "B"
-            for point in grid.pointsWithinManahattanDistance(reading.distanceToBeacon, of: reading.location) {
-                if grid[point] == "." { grid[point] = "#" }
+            if let eliminatedRange = reading.eliminatedRange(row: rowToRead) {
+                rangeSet.insert(contentsOf: Range(eliminatedRange))
+
+                if rowToRead == reading.nearestBeacon.r {
+                    rangeSet.remove(reading.nearestBeacon.c)
+                }
             }
         }
-
-        let result = grid[row: isSample ? 10 : 20_000].lazy
-            .filter { $0 == "#" || $0 == "S" }
-            .count
-
-//        print(grid)
-//        print("")
-        print(result)
+        print(rangeSet.count)
     }
 
     func part2() async {
+        let scale = isSample ? 20 : 4000000
+
+        let start = Date()
+        for r in 0...scale {
+            var rangeSet = RangeSet([Range(0...scale)])
+
+            for reading in readings {
+                if let eliminatedRange = reading.eliminatedRange(row: r) {
+                    rangeSet.remove(contentsOf: Range(eliminatedRange))
+                }
+            }
+            if rangeSet.count == 1 {
+                let c = rangeSet.values.first!
+                print(c, r)
+                print(c * scale + r)
+                break
+            }
+        }
+        print(Date().timeIntervalSince(start))
+        print("done")
 
     }
 }
@@ -54,6 +64,7 @@ struct Day15: Day {
 private struct SensorReading {
     var location: GridPoint
     var nearestBeacon: GridPoint
+    var distanceToBeacon: Int
 
     init?(line: some StringProtocol) {
         let regex = #/Sensor at x=(?<lx>-?\d+), y=(?<ly>-?\d+): closest beacon is at x=(?<bx>-?\d+), y=(?<by>-?\d+)/#
@@ -61,10 +72,19 @@ private struct SensorReading {
 
         location = GridPoint(x: Int(match.lx)!, y: Int(match.ly)!)
         nearestBeacon = GridPoint(x: Int(match.bx)!, y: Int(match.by)!)
+        distanceToBeacon = location.manhattanDistance(to: nearestBeacon)
     }
 
-    var distanceToBeacon: Int {
-        location.manhattanDistance(to: nearestBeacon)
+
+    func eliminatesBeacon(at point: GridPoint) -> Bool {
+        return point.manhattanDistance(to: location) <= distanceToBeacon
+    }
+
+    func eliminatedRange(row: Int) -> ClosedRange<Int>? {
+        let columnDelta = distanceToBeacon - abs(row - location.r)
+        if columnDelta < 0 { return nil }
+        let result = (location.c - columnDelta)...(location.c + columnDelta)
+        return result
     }
 }
 
@@ -87,5 +107,20 @@ private extension Grid {
             }
         }
         return points
+    }
+}
+
+private extension RangeSet<Int> {
+    mutating func remove(_ x: Int) {
+        let range = x..<(x+1)
+        self.remove(contentsOf: range)
+    }
+
+    var count: Int {
+        return self.ranges.map(\.count).reduce(0, +)
+    }
+
+    var values: [Int] {
+        return self.ranges.flatMap({$0})
     }
 }
