@@ -4,33 +4,34 @@ import XCTest
 
 // Make a copy of this file for every day to ensure the provided smoke tests
 // pass.
-final class Day00Tests: XCTestCase {
-  // Smoke test data provided in the challenge question
-  let testData = """
-    1000
-    2000
-    3000
-
-    4000
-
-    5000
-    6000
-
-    7000
-    8000
-    9000
-
-    10000
-
+final class Day01Tests: XCTestCase {
+    // Smoke test data provided in the challenge question
+    let testData = """
+    1abc2
+    pqr3stu8vwx
+    a1b2c3d4e5f
+    treb7uchet
     """
 
-  func testPart1() throws {
-    let challenge = Day00(data: testData)
-    XCTAssertEqual(String(describing: challenge.part1()), "6000")
-  }
+    let testData2 = """
+    two1nine
+    eightwothree
+    abcone2threexyz
+    xtwone3four
+    4nineeightseven2
+    zoneight234
+    7pqrstsixteen
+    """
 
-  func testPart2() throws {
-    let challenge = Day00(data: testData)
-    XCTAssertEqual(String(describing: challenge.part2()), "32000")
-  }
+    func testPart1() throws {
+        let challenge = Day01(data: testData)
+        let answer = challenge.part1()
+        XCTAssertEqual(answer, 142)
+    }
+    
+    func testPart2() throws {
+        let challenge = Day01(data: testData2)
+        let answer = challenge.part2()
+        XCTAssertEqual(answer, 281)
+    }
 }

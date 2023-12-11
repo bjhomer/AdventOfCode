@@ -19,10 +19,39 @@ struct Day01: AdventDay {
 
         return answer
     }
+
+    func part2() -> Int {
+        let answer = rows
+            .map { $0.extractNumbers() }
+            .map { 10*$0.first! + $0.last! }
+            .reduce(0, +)
+        return answer
+    }
 }
 
 private extension String {
     func extractDigits() -> [Int] {
         return self.filter(\.isNumber).map { $0.wholeNumberValue! }
+    }
+
+    func extractNumbers() -> [Int] {
+        self.indices.compactMap { self[$0...].startingNumber() }
+    }
+}
+
+private extension Substring {
+    func startingNumber() -> Int? {
+        if let match = self.prefixMatch(of: /(\d)/) {
+            return Int(match.1)
+        }
+
+        let words = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+        
+        let value = words
+            .indexed()
+            .first { (idx, word) in self.hasPrefix(word) }
+            .map { $0.index + 1}
+
+        return value
     }
 }

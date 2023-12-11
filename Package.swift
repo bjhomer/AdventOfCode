@@ -30,7 +30,8 @@ let package = Package(
        .executableTarget(name: "AdventOfCode2023",
                          dependencies: ["AdventCore"] + dependencies,
                          exclude: ["Tests"],
-                         resources: [.copy("Data")]
+                         resources: [.copy("Inputs")],
+                         swiftSettings: [.enableUpcomingFeature("BareSlashRegexLiterals")]
                         ),
         .executableTarget(name: "AdventOfCode2022",
                           dependencies: ["AdventCore"] + dependencies,

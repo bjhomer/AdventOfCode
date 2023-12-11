@@ -61,7 +61,7 @@ extension AdventDay {
   static func loadData(challengeDay: Int) -> String {
     let dayString = String(format: "%02d", challengeDay)
     let dataFilename = "Day\(dayString)"
-    let dataURL = Bundle.main.url(
+    let dataURL = Bundle.module.url(
       forResource: dataFilename,
       withExtension: "txt",
       subdirectory: "Inputs")
@@ -69,7 +69,7 @@ extension AdventDay {
     guard let dataURL,
       let data = try? String(contentsOf: dataURL, encoding: .utf8)
     else {
-      fatalError("Couldn't find file '\(dataFilename).txt' in the 'Data' directory.")
+      fatalError("Couldn't find file '\(dataFilename).txt' in the 'Inputs' directory.")
     }
 
     // On Windows, line separators may be CRLF. Converting to LF so that \n
