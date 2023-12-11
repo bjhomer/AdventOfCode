@@ -64,7 +64,7 @@ extension AdventDay {
     let dataURL = Bundle.main.url(
       forResource: dataFilename,
       withExtension: "txt",
-      subdirectory: "Data")
+      subdirectory: "Inputs")
 
     guard let dataURL,
       let data = try? String(contentsOf: dataURL, encoding: .utf8)
