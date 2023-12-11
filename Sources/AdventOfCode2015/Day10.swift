@@ -30,7 +30,7 @@ func day10(input: String) {
 
 
 private func step(_ string: String) -> String {
-    let chunks = string.chunked(on: { $0 })
+    let chunks = string.chunked(on: { $0 }).map(\.1)
     let result =
         chunks.map { (chunk) in "\(chunk.count)\(chunk.first!)"}
         .joined()

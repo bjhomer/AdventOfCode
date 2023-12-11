@@ -57,7 +57,10 @@ private struct Password {
     var hasTwoRepeatingPairs: Bool {
         let pairs = string
             .chunked(on: { $0 })
-            .filter { $0.count >= 2 }
+            .filter { (char, substring) in
+                return substring.count >= 2
+            }
+            .map { $0.1 }
 
         let uniqueLetters = Set(pairs.compactMap(\.first))
 

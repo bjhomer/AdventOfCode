@@ -117,7 +117,7 @@ public extension Collection {
         distance(from: startIndex, to: index)
     }
 
-    func print() -> Self {
+    func printed() -> Self {
         Swift.print(self)
         return self
     }

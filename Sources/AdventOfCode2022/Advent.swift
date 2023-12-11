@@ -18,7 +18,7 @@ struct Advent: AsyncParsableCommand {
     var sample = false
 
     @Argument(help: "Which day should we run?")
-    var day: Int = 16
+    var day: Int = 1
 
     var inputFile: URL { sample ? sampleFile : problemFile }
 

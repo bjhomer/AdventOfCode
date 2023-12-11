@@ -8,6 +8,7 @@
 import Foundation
 import AdventCore
 import SwiftGraph
+import Algorithms
 
 struct Day16: Day {
 
@@ -39,68 +40,15 @@ struct Day16: Day {
 
     func part1() async {
         let solver = DFSSolver(graph: graph)
-        let result = solver.maxValue()
+        let result = solver.maxValue_part1()
         print(result)
     }
 
-    func solvePart1ByHighestValue() async {
-        var activeNodes: [Node] { nodes.filter { $0.isActive } }
-        var inactiveNodes: [Node] { nodes.filter { $0.isActive == false }}
-
-        var turnsRemaining = 30
-
-        var pressureReleased = 0
-
-        var current = nodesByName["AA"]!
-        while turnsRemaining > 0 {
-            let bestMove = inactiveNodes
-                .compactMap {node in
-                    let x = value(of: node, from: current, turnsRemaining: turnsRemaining)
-                    print("   At turn \(turnsRemaining), \(node.name) has value \(x?.value ?? 0)")
-                    return x
-                }
-                .sorted(on: \.value)
-                .last!
-
-            print("\nTurn \(turnsRemaining):")
-            print("--------")
-            print("Moved to \(bestMove.destination.name), costing \(bestMove.duration) turns")
-            print("Activated for \(bestMove.value) pressure")
-            turnsRemaining -= bestMove.duration
-            pressureReleased += bestMove.value
-            bestMove.destination.isActive = true
-            current = bestMove.destination
-            print("Total pressure released: \(pressureReleased)")
-        }
-
-        print()
-        print(pressureReleased)
-
-    }
-
     func part2() async {
-
+        let solver = DFSSolver(graph: graph)
+        let result = solver.maxValue_part2()
+        print(result)
     }
-
-    private func turns(from: Node, to: Node) -> Int {
-        return graph.bfs(from: from, to: to).count
-    }
-
-    private func value(of target: Node, from: Node, turnsRemaining: Int) -> MoveValue? {
-        let distance = turns(from: from, to: target)
-        if distance >= turnsRemaining { return nil }
-
-        let turnsActive = (turnsRemaining - distance - 1)
-        let value = target.value(turnsActive: turnsActive)
-
-        let result = MoveValue(value: value, duration: distance + 1, destination: target)
-        return result
-    }
-
-    private func node(_ str: String) -> Node {
-        nodesByName[str]!
-    }
-
 }
 
 private class DFSSolver {
@@ -109,13 +57,16 @@ private class DFSSolver {
     private let nodesByName: [String: Node]
 
     private var cache: [Situation: Int] = [:]
+    private var cache2: [Situation2: Int] = [:]
+
+    private var bestSoFar: Int = 0
 
     init(graph: UnweightedGraph<Node>) {
         self.graph = graph
         self.nodesByName = graph.vertices.keyed(by: \.name)
     }
 
-    func maxValue() -> Int {
+    func maxValue_part1() -> Int {
         let availableNodes = Set(graph.vertices.filter { $0.flowRate > 0 })
 
         let start = nodesByName["AA"]!
@@ -123,8 +74,12 @@ private class DFSSolver {
         return value(of: situation)
     }
 
-    private enum Action: Equatable {
-        case activate, move(Node)
+    func maxValue_part2() -> Int {
+        let availableNodes = Set(graph.vertices.filter { $0.flowRate > 0 })
+
+        let start = nodesByName["AA"]!
+        let situation = Situation2(node1: start, node2: start, minutesRemaining: 26, availableNodes: availableNodes, releasedSoFar: 0)
+        return value(of: situation)
     }
 
     private struct Situation: Hashable, CustomStringConvertible {
@@ -137,6 +92,18 @@ private class DFSSolver {
         }
     }
 
+    private struct Situation2: Hashable, CustomStringConvertible {
+        var node1: Node
+        var node2: Node
+        var minutesRemaining: Int
+        var availableNodes: Set<Node>
+        var releasedSoFar: Int
+
+        var description: String {
+            "\(minutesRemaining) \(node1.name) \(node2.name) -- \(availableNodes.map(\.name))"
+        }
+    }
+
 
     private func value(of situation: Situation) -> Int {
         if let value = cache[situation] { return value }
@@ -146,30 +113,117 @@ private class DFSSolver {
         let availableNodes = situation.availableNodes
         let node = situation.node
 
-        var options: [(Action, Int)] = []
+        var options: [Int] = []
         if availableNodes.contains(node) {
             let activateValue = node.value(turnsActive: minutesRemaining - 1)
             let newSituation = Situation(node: node, minutesRemaining: minutesRemaining - 1, availableNodes: availableNodes.subtracting([node]))
 
             let totalValue = activateValue + value(of: newSituation)
 
-            options.append( (.activate, totalValue) )
+            options.append( totalValue )
         }
         if let neighbors = graph.neighborsForVertex(node) {
             for neighbor in neighbors {
                 let newSituation = Situation(node: neighbor, minutesRemaining: minutesRemaining - 1, availableNodes: availableNodes)
                 let totalValue = value(of: newSituation)
-                options.append( (.move(neighbor), totalValue) )
+                options.append(totalValue)
             }
         }
 
-        let value = options.sorted(on: \.1).last?.1 ?? 0
+        let value = options.max() ?? 0
         cache[situation] = value
         return value
-
     }
 
+    enum Action: Equatable {
+        case activate, move(Node)
+    }
 
+    private func value(of situation: Situation2) -> Int {
+        if let value = cache2[situation] { return value }
+
+        let minutesRemaining = situation.minutesRemaining
+        if minutesRemaining <= 0 { return 0 }
+
+        let availableNodes = situation.availableNodes
+        let node1 = situation.node1
+        let node2 = situation.node2
+
+        let bestPossibleOutcome = situation.releasedSoFar
+        + availableNodes
+            .map { $0.value(turnsActive: minutesRemaining - 1)}
+            .reduce(0,+)
+
+        if bestPossibleOutcome < bestSoFar {
+            // This cannot possibly be the best. Bail early
+            cache2[situation] = 0
+            return 0
+        }
+
+        func availableActions(from node: Node) -> [Action] {
+            var actions: [Action] = []
+            if availableNodes.contains(node) { actions.append(.activate) }
+            if let neighbors = graph.neighborsForVertex(node) {
+                for neighbor in neighbors {
+                    actions.append(.move(neighbor))
+                }
+            }
+            return actions
+        }
+
+        let actions1 = availableActions(from: node1)
+        let actions2 = availableActions(from: node2)
+
+        var possibleMoves = Array(product(actions1, actions2))
+        if node1 == node2,
+           let index = possibleMoves.firstIndex(where: {$0 == .activate && $1 == .activate} ) {
+            possibleMoves.remove(at: index)
+        }
+
+        var moveValues: [Int] = []
+
+        for move in possibleMoves {
+            var activateValue1 = 0
+            var activateValue2 = 0
+
+            var newAvailableNodes = situation.availableNodes
+
+            var newNode1 = node1
+            var newNode2 = node2
+
+            switch move.0 {
+            case .activate:
+                activateValue1 = node1.value(turnsActive: minutesRemaining - 1)
+                newAvailableNodes.remove(node1)
+            case .move(let neighbor):
+                newNode1 = neighbor
+            }
+
+            switch move.1 {
+            case .activate:
+                activateValue2 = node2.value(turnsActive: minutesRemaining - 1)
+                newAvailableNodes.remove(node2)
+            case .move(let neighbor):
+                newNode2 = neighbor
+            }
+
+            let newlyActivatedValue = activateValue1 + activateValue2
+            let newSituation = Situation2(node1: newNode1,
+                                          node2: newNode2,
+                                          minutesRemaining: minutesRemaining - 1,
+                                          availableNodes: newAvailableNodes,
+                                          releasedSoFar: situation.releasedSoFar + newlyActivatedValue)
+            let totalValue = newlyActivatedValue + value(of: newSituation)
+            moveValues.append(totalValue)
+        }
+        let value = moveValues.max() ?? 0
+        cache2[situation] = value
+        if value > bestSoFar {
+            print("Found \(value)")
+            bestSoFar = value
+        }
+        return value
+    }
 }
 
 

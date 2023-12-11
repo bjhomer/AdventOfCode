@@ -1,21 +1,20 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
+let dependencies: [Target.Dependency] = [
+    .product(name: "ArgumentParser", package: "swift-argument-parser"),
+    .product(name: "Algorithms", package: "swift-algorithms"),
+    .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+    .product(name: "StandardLibraryPreview", package: "swift-standard-library-preview"),
+    .product(name: "SwiftGraph", package: "SwiftGraph"),
+    .product(name: "Collections", package: "swift-collections")
+]
+
 let package = Package(
     name: "AdventOfCode",
     platforms: [.macOS(.v13)],
-    products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
-            name: "AdventCore",
-            targets: ["AdventCore"]),
-        .executable(name: "Advent2022", targets: ["AdventOfCode2022"]),
-        .executable(name: "Advent2021", targets: ["AdventOfCode2021"]),
-        .executable(name: "Advent2020", targets: ["AdventOfCode2020"]),
-        .executable(name: "Advent2015", targets: ["AdventOfCode2015"])
-    ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "1.2.0")),
@@ -28,51 +27,31 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
+       .executableTarget(name: "AdventOfCode2023",
+                         dependencies: ["AdventCore"] + dependencies,
+                         exclude: ["Tests"],
+                         resources: [.copy("Data")]
+                        ),
         .executableTarget(name: "AdventOfCode2022",
-                          dependencies: [
-                            .target(name: "AdventCore"),
-                            .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                            .product(name: "Algorithms", package: "swift-algorithms"),
-                            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
-                            .product(name: "StandardLibraryPreview", package: "swift-standard-library-preview"),
-                            .product(name: "SwiftGraph", package: "SwiftGraph"),
-                            .product(name: "Collections", package: "swift-collections")
-                          ],
+                          dependencies: ["AdventCore"] + dependencies,
                           exclude: ["Inputs"]),
-        .executableTarget(name: "AdventOfCode2021",
-                dependencies: [
-                    .target(name: "AdventCore"),
-                    .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                    .product(name: "Algorithms", package: "swift-algorithms"),
-                    .product(name: "StandardLibraryPreview", package: "swift-standard-library-preview"),
-                ],
-                exclude: ["Inputs"]),
         .executableTarget(name: "AdventOfCode2020",
-                dependencies: [
-                    .target(name: "AdventCore"),
-                    .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                    .product(name: "Algorithms", package: "swift-algorithms"),
-                    .product(name: "StandardLibraryPreview", package: "swift-standard-library-preview"),
-                ],
+                dependencies: ["AdventCore"] + dependencies,
                 exclude: ["Inputs"]),
         .executableTarget(name: "AdventOfCode2015",
-                dependencies: [
-                    .target(name: "AdventCore"),
-                    .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                    .product(name: "Algorithms", package: "swift-algorithms"),
-                    .product(name: "SwiftGraph", package: "SwiftGraph"),
-                ],
+                dependencies: ["AdventCore"] + dependencies,
                 exclude: ["Inputs"]),
-
         .target(
             name: "AdventCore",
-            dependencies: [
-                .product(name: "Algorithms", package: "swift-algorithms"),
-                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
-            ]),
+            dependencies: dependencies),
         .testTarget(
             name: "AdventCoreTests",
             dependencies: ["AdventCore"]),
+        .testTarget(
+            name: "Advent2023Tests",
+            dependencies: ["AdventOfCode2023"] + dependencies,
+            path: "Sources/AdventOfCode2023/Tests"
+        )
     ]
 )
 
