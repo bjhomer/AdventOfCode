@@ -48,10 +48,10 @@ private extension StringProtocol {
     }
 
     var isNicePart2: Bool {
-        let repeatedSubstringRegex: Regex = #"(..).*(\1)"#
+        let repeatedSubstringRegex: ACRegex = #"(..).*(\1)"#
         let hasRepeatedSet = repeatedSubstringRegex.match(self) != nil
 
-        let abaRegex: Regex = #"(.).(\1)"#
+        let abaRegex: ACRegex = #"(.).(\1)"#
         let hasABA = abaRegex.match(self) != nil
 
         return hasRepeatedSet && hasABA

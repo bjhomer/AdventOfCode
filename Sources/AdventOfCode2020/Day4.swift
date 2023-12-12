@@ -73,7 +73,7 @@ private struct Passport {
     var iyr: Int? { fields["iyr"].flatMap(Int.init) }
     var eyr: Int? { fields["eyr"].flatMap(Int.init) }
     var hgt: Height? {
-        let regex = Regex(#"^(\d+)(in|cm)$"#)
+        let regex = ACRegex(#"^(\d+)(in|cm)$"#)
 
         guard let match = regex.match(fields["hgt"])
         else { return nil }
@@ -82,14 +82,14 @@ private struct Passport {
         return Height(number, unit: unit)
     }
     var hcl: String? {
-        let regex = Regex(#"^#([0-9a-f]{6})"#)
+        let regex = ACRegex(#"^#([0-9a-f]{6})"#)
         guard let match = regex.match(fields["hcl"])
         else { return nil }
         return match[0]
     }
     var ecl: EyeColor? { fields["ecl"].flatMap(EyeColor.init(rawValue:)) }
     var pid: Int? {
-        let regex = Regex(#"^\d{9}$"#)
+        let regex = ACRegex(#"^\d{9}$"#)
         guard let matchString = regex.match(fields["pid"])?[0],
               let int = Int(matchString)
         else { return nil }

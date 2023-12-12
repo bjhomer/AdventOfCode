@@ -146,7 +146,7 @@ private enum Instruction {
     case setMask(String)
     case setMemory(address: Int, value: Int)
 
-    private static var memRegex: Regex = #"mem\[(\d+)\]"#
+    private static var memRegex: ACRegex = #"mem\[(\d+)\]"#
 
     init?<Str: StringProtocol>(line: Str) {
         guard let (destination, valueStr) = line.split(separator: " = ").explode()

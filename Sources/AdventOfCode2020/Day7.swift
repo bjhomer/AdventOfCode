@@ -72,7 +72,7 @@ struct BagType: Hashable {
     //light red bags contain 1 bright white bag, 2 muted yellow bags.
     init?<Str>(_ line: Str) where Str: StringProtocol {
 
-        let regex: Regex = #"(.+) bags contain (.+)\."#
+        let regex: ACRegex = #"(.+) bags contain (.+)\."#
         guard let match = regex.match(line) else { return nil }
 
         self.color = match[1]
@@ -130,7 +130,7 @@ struct ContainedBag: Hashable {
     }
 
     init?<Str>(_ line: Str) where Str: StringProtocol {
-        let regex: Regex = #"(\d+) (.+) bags?"#
+        let regex: ACRegex = #"(\d+) (.+) bags?"#
 
         guard let match = regex.match(line) else { return nil }
 

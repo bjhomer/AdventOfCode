@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Regex {
+public struct ACRegex {
     public struct Match {
         private let result: NSTextCheckingResult
         private let string: NSString
@@ -42,13 +42,13 @@ public struct Regex {
     }
 }
 
-extension Regex: ExpressibleByStringLiteral {
+extension ACRegex: ExpressibleByStringLiteral {
     public init(stringLiteral value: StringLiteralType) {
         self.init(value)
     }
 }
 
-extension Regex.Match: Collection {
+extension ACRegex.Match: Collection {
     public func index(after i: Int) -> Int { i + 1 }
 
     public var startIndex: Int { 0 }

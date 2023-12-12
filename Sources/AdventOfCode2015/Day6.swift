@@ -144,7 +144,7 @@ private struct Instruction {
     var command: Command
 
     init?<S>(_ line: S) where S: StringProtocol {
-        let regex: Regex = #"^(toggle|turn on|turn off) (\d+),(\d+) through (\d+),(\d+)$"#
+        let regex: ACRegex = #"^(toggle|turn on|turn off) (\d+),(\d+) through (\d+),(\d+)$"#
 
         guard let match = regex.match(line),
               let (c, t, l, b, r) = match.dropFirst().explode()

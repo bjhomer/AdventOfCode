@@ -12,3 +12,19 @@ infix operator =>
 public func => <T, U> (lhs: T, rhs: (T)->U) -> U {
     return rhs(lhs)
 }
+
+
+
+precedencegroup ForwardPipe {
+    associativity: left
+}
+
+infix operator |>: ForwardPipe
+
+public func |> <T, U> (value: T, transform: (T)->U) -> U {
+    return transform(value)
+}
+
+
+
+

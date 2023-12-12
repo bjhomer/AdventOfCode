@@ -25,6 +25,14 @@ final class AdventCoreTests: XCTestCase {
         XCTAssertEqual(sequences, [[10, 20, 30], [20, 30, 40], [20]])
     }
 
+    func testOperators() {
+        let result = "abc2334defg"
+            .filter { $0.isWholeNumber }
+        |> { Int($0) }
+
+        XCTAssertEqual(result, 2334)
+    }
+
     static var allTests = [
         ("testExample", testExample),
     ]

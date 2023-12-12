@@ -177,7 +177,7 @@ private struct ParsedLine {
     var weight: Int
 
     init?<Str>(line: Str) where Str: StringProtocol {
-        let regex: Regex = #"(.+) to (.+) = (\d+)"#
+        let regex: ACRegex = #"(.+) to (.+) = (\d+)"#
 
         guard let match = regex.match(line),
               case let start = match[1],

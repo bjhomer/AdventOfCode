@@ -23,3 +23,7 @@ public extension StringProtocol {
         return self.split(separator: "\n")
     }
 }
+
+public extension Substring {
+    var string: String { String(self) }
+}

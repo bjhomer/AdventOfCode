@@ -48,13 +48,13 @@ private class Gate {
         let (inst, name) = line.split(separator: " -> ").explode()!
         self.name = String(name)
 
-        let andPattern: Regex = #"^(.+) AND (.+)$"#
-        let orPattern: Regex  = #"^(.+) OR (.+)$"#
-        let notPattern: Regex = #"^NOT (.+)$"#
-        let constPattern: Regex = #"^(\d+)$"#
-        let lshiftPattern: Regex = #"^(.+) LSHIFT (\d+)$"#
-        let rshiftPattern: Regex = #"^(.+) RSHIFT (\d+)$"#
-        let passthroughPattern: Regex = #"^([^ ]+)$"#
+        let andPattern: ACRegex = #"^(.+) AND (.+)$"#
+        let orPattern: ACRegex  = #"^(.+) OR (.+)$"#
+        let notPattern: ACRegex = #"^NOT (.+)$"#
+        let constPattern: ACRegex = #"^(\d+)$"#
+        let lshiftPattern: ACRegex = #"^(.+) LSHIFT (\d+)$"#
+        let rshiftPattern: ACRegex = #"^(.+) RSHIFT (\d+)$"#
+        let passthroughPattern: ACRegex = #"^([^ ]+)$"#
 
         if let match = andPattern.match(inst) {
             operation = .and(match[1], match[2])
