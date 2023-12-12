@@ -1,0 +1,124 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Debug AdventOfCode2022",
+            "program": "${workspaceFolder:AdventOfCode}/.build/debug/AdventOfCode2022",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2022"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Release AdventOfCode2022",
+            "program": "${workspaceFolder:AdventOfCode}/.build/release/AdventOfCode2022",
+            "preLaunchTask": "swift: Build Release AdventOfCode2022"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Debug AdventOfCode2021",
+            "program": "${workspaceFolder:AdventOfCode}/.build/debug/AdventOfCode2021",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2021"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Release AdventOfCode2021",
+            "program": "${workspaceFolder:AdventOfCode}/.build/release/AdventOfCode2021",
+            "preLaunchTask": "swift: Build Release AdventOfCode2021"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Debug AdventOfCode2020",
+            "program": "${workspaceFolder:AdventOfCode}/.build/debug/AdventOfCode2020",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2020"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Release AdventOfCode2020",
+            "program": "${workspaceFolder:AdventOfCode}/.build/release/AdventOfCode2020",
+            "preLaunchTask": "swift: Build Release AdventOfCode2020"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Debug AdventOfCode2015",
+            "program": "${workspaceFolder:AdventOfCode}/.build/debug/AdventOfCode2015",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2015"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Release AdventOfCode2015",
+            "program": "${workspaceFolder:AdventOfCode}/.build/release/AdventOfCode2015",
+            "preLaunchTask": "swift: Build Release AdventOfCode2015"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Debug AdventOfCode2023",
+            "program": "${workspaceFolder:AdventOfCode}/.build/debug/AdventOfCode2023",
+            "preLaunchTask": "swift: Build Debug AdventOfCode2023"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "swift"
+            ],
+            "args": [],
+            "cwd": "${workspaceFolder:AdventOfCode}",
+            "name": "Release AdventOfCode2023",
+            "program": "${workspaceFolder:AdventOfCode}/.build/release/AdventOfCode2023",
+            "preLaunchTask": "swift: Build Release AdventOfCode2023"
+        }
+    ]
+}

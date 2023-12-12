@@ -134,12 +134,46 @@ public struct Grid<T> {
 
     public func index(moved: Direction, from start: Index) -> Index? {
         let index = start.offset(by: moved.offsets)
-        guard (minR..<maxR) ~= index.r && (minR..<maxR) ~= index.c else { return nil }
+        guard isValidIndex(index) else { return nil }
         return index
     }
 
+    public func isValidIndex(_ index: Index) -> Bool {
+        return (minR...maxR) ~= index.r && (minR...maxR) ~= index.c
+    }
+    
+    /// Returs the four cardinal neighbors of this index
     public func neighbors(of index: Index) -> [Index] {
         Direction.allCases.compactMap { self.index(moved:$0, from: index) }
+    }
+    
+    /// Returns all surrounding indices, including diagonals
+    public func surroundingIndices(of index: Index) -> [Index] {
+        let deltas = product((-1...1), (-1...1))
+
+        let result = deltas
+            .map { Index(x: index.x + $0.0, y: index.y + $0.1) }
+            .filter { isValidIndex($0) && index != $0 }
+
+        return result
+    }
+    
+    /// Walks from the start position in the indicated direction, testing
+    /// each index along the way to see whether it satisfies the given test.
+    /// - Returns: The last index in this walk that satisfied the test, or
+    ///       nil if `start` did not even satisfy the test.
+    public func lastIndex(from start: Index, direction: Direction, satisfying test: (Index)->Bool) -> Index? {
+        guard test(start) else { return nil }
+
+        var current = start
+        while true {
+            guard let next = index(moved: direction, from: current),
+                  test(next) else { break }
+            current = next
+        }
+
+        return current
+
     }
 }
 

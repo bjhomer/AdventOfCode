@@ -27,3 +27,9 @@ public extension StringProtocol {
 public extension Substring {
     var string: String { String(self) }
 }
+
+public extension Collection where Element == Character {
+    func joined() -> String {
+        map { String($0) }.joined()
+    }
+}

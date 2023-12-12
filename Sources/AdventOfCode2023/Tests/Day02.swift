@@ -22,7 +22,7 @@ final class Day02Tests: XCTestCase {
 
     func testPart2() throws {
         let challenge = Day02(data: testData)
-        let answer = try challenge.part2()
+        let answer = challenge.part2()
         XCTAssertEqual(answer, 2286)
     }
 }
