@@ -30,7 +30,20 @@ struct Day03: AdventDay {
     }
 
     func part2() -> Int {
-        0
+        let starLocations = grid
+            .indices
+            .filter { grid[$0] == "*" }
+
+        let gearLocations = starLocations
+            .filter { grid.isGear(at: $0) }
+
+        let gearValues = gearLocations
+            .map { grid
+                .surroundingPartNumbers(at: $0)
+                .map(\.value)
+                .reduce(1, *)
+            }
+        return gearValues.reduce(0, +)
     }
 }
 
@@ -45,6 +58,20 @@ private extension Grid where T == Character {
         let chars = self[row: index.r][(start.c)...(end.c)]
         let result = Int(chars.joined())!
         return (start, result)
+    }
+
+    func surroundingPartNumbers(at index: Index) -> [(start: Index, value: Int)] {
+        return surroundingIndices(of: index)
+            .compactMap { partNumber(at: $0) }
+            .uniqued(on: \.start)
+    }
+
+    func isGear(at index: Index) -> Bool {
+        surroundingIndices(of: index)
+            .compactMap { partNumber(at: $0) }
+            .uniqued(on: \.start)
+            .count == 2
+
     }
 }
 
