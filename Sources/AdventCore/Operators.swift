@@ -17,6 +17,7 @@ public func => <T, U> (lhs: T, rhs: (T)->U) -> U {
 
 precedencegroup ForwardPipe {
     associativity: left
+    higherThan: AssignmentPrecedence
 }
 
 infix operator |>: ForwardPipe
