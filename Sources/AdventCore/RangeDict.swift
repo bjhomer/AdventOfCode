@@ -24,7 +24,7 @@ public struct RangeDict<Value> {
         return storage[key] ?? nil
     }
 
-    public mutating func updateRange(_ range: Range<Int>, transform: (inout Value?)->Void) {
+    public mutating func updateRange(_ range: Range<Int>, transform: (Value?)->Value?) {
         let currentEndValue = value(at: range.upperBound)
 
         let startIndex: Int
@@ -48,7 +48,8 @@ public struct RangeDict<Value> {
 
         for idx in startIndex..<endIndex {
             let key = keys[idx]
-            transform(&storage[key, default: nil])
+            let currentValue = storage[key, default: nil]
+            storage[key] = transform(currentValue)
         }
         let endKey = keys[endIndex]
         if storage.keys.contains(endKey) == false {
@@ -57,14 +58,19 @@ public struct RangeDict<Value> {
     }
 
     public mutating func setRange(_ range: Range<Int>, to value: Value) {
-        updateRange(range) { $0 = value }
+        updateRange(range) { _ in value }
     }
 
     public mutating func clearRange(_ range: Range<Int>) {
-        updateRange(range) { $0 = nil }
+        updateRange(range) { _ in nil }
     }
 
     public subscript(_ index: Int) -> Value? {
         value(at: index)
+    }
+
+    public var ranges: [Range<Int>] {
+        keys.adjacentPairs()
+            .map { $0..<$1 }
     }
 }

@@ -61,89 +61,103 @@ struct Day05: AdventDay {
 
 extension Day05 {
     struct Map: CustomStringConvertible {
-        var mappings: [MappedRange]
+        var mappings: RangeDict<Int>
 
         init?(section: Substring) {
             let lines = section.lines
-            mappings = lines.dropFirst()
+            let ranges = lines.dropFirst()
                 .compactMap { MappedRange(line: $0) }
                 .sorted(on: \.sourceStart)
+
+            mappings = .init()
+
+            for mappedRange in ranges {
+                mappings.setRange(mappedRange.sourceRange, to: mappedRange.offset)
+            }
         }
 
         init() {
-            mappings = []
+            mappings = .init()
         }
 
         func value(for source: Int) -> Int {
-            if let value = mappings.firstNonNil({$0.destination(for: source)}) {
-                return value
+            if let offset = mappings[source] {
+                return source + offset
             }
             return source
         }
 
         func composed(with other: Map) -> Map {
             var result = self
-            for mapping in other.mappings {
-                result.compose(with: mapping)
-            }
+//            for mapping in other.mappings {
+//                result.compose(with: mapping)
+//            }
             return result
         }
 
         mutating func compose(with input: MappedRange) {
-            var remainingInput = input
-            var newMappings = self.mappings.sorted(on: \.destStart)
 
-            var foundStart = false
-            var foundEnd = false
-            for mapping in newMappings {
-                let overlap = mapping.destRange.intersection(remainingInput.sourceRange)
-
-                if !foundStart {
-                    if remainingInput.sourceStart < mapping.destStart {
-                        // The input starts before this mapping. Just insert that portion.
-                        let prefixInput = MappedRange(sourceRange: remainingInput.sourceStart..<mapping.destStart,
-                                                      offset: remainingInput.offset)
-                        newMappings.append(prefixInput)
-                        remainingInput.discardBefore(source: mapping.destStart)
-                        foundStart = true
-                    }
-                    else if remainingInput.sourceStart < mapping.sourceEnd {
-                        // the input starts _within_ this mapping. Split this mapping in half
-//                        let prefix = mapping.discardAfter(dest: remainingInput.sourceStart)
-                        foundStart = true
-                    }
+            for range in mappings.ranges {
+                let destRange = range.offset(by: mappings[range.lowerBound] ?? 0)
+                if destRange.overlaps(input.sourceRange) {
+                    mappings.updateRange(range) { $0.map { $0 + input.offset } ?? 0 }
                 }
-
             }
+//
+//            var remainingInput = input
+//            var newMappings = self.mappings.sorted(on: \.destStart)
+//
+//            var foundStart = false
+//            var foundEnd = false
+//            for mapping in newMappings {
+//                let overlap = mapping.destRange.intersection(remainingInput.sourceRange)
+//
+//                if !foundStart {
+//                    if remainingInput.sourceStart < mapping.destStart {
+//                        // The input starts before this mapping. Just insert that portion.
+//                        let prefixInput = MappedRange(sourceRange: remainingInput.sourceStart..<mapping.destStart,
+//                                                      offset: remainingInput.offset)
+//                        newMappings.append(prefixInput)
+//                        remainingInput.discardBefore(source: mapping.destStart)
+//                        foundStart = true
+//                    }
+//                    else if remainingInput.sourceStart < mapping.sourceEnd {
+//                        // the input starts _within_ this mapping. Split this mapping in half
+////                        let prefix = mapping.discardAfter(dest: remainingInput.sourceStart)
+//                        foundStart = true
+//                    }
+//                }
+//
+//            }
         }
 
         mutating func compose2(with input: MappedRange) {
-            var mappingsToInsert: [MappedRange] = []
-
-            var remainingInputs = [input]
-
-            for i in 0..<mappings.count {
-                let mapping = mappings[i]
-
-                for input in remainingInputs {
-                    guard let overlapInDest = mapping.destRange.intersection(input.sourceRange)
-                    else { continue }
-
-                    let overlapInSource = overlapInDest.offset(by: -mapping.offset)
-                    mappingsToInsert.append(.init(sourceRange: overlapInSource, offset: mapping.offset + input.offset))
-                    remainingInputs = input.remainders(outside: overlapInDest)
-                }
-            }
-
-            if remainingInputs.isEmpty == false {
-                mappingsToInsert.append(contentsOf: remainingInputs)
-            }
-
-            mappings.insert(contentsOf: mappingsToInsert, at: 0)
+//            var mappingsToInsert: [MappedRange] = []
+//
+//            var remainingInputs = [input]
+//
+//            for i in 0..<mappings.count {
+//                let mapping = mappings[i]
+//
+//                for input in remainingInputs {
+//                    guard let overlapInDest = mapping.destRange.intersection(input.sourceRange)
+//                    else { continue }
+//
+//                    let overlapInSource = overlapInDest.offset(by: -mapping.offset)
+//                    mappingsToInsert.append(.init(sourceRange: overlapInSource, offset: mapping.offset + input.offset))
+//                    remainingInputs = input.remainders(outside: overlapInDest)
+//                }
+//            }
+//
+//            if remainingInputs.isEmpty == false {
+//                mappingsToInsert.append(contentsOf: remainingInputs)
+//            }
+//
+//            mappings.insert(contentsOf: mappingsToInsert, at: 0)
         }
 
         var description: String {
-            mappings.map(\.description).joined(separator: "\n")
+            mappings.ranges.map(\.description).joined(separator: "\n")
         }
     }
 

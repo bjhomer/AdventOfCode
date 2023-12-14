@@ -51,6 +51,7 @@ final class RangeDictTests: XCTestCase {
         d.setRange(1..<10, to: "cow")
 
         XCTAssertEqual(d[5], "cow")
+        XCTAssertEqual(d[0], nil)
 
         d.setRange(3..<7, to: "pig")
         XCTAssertEqual(d[2], "cow")
