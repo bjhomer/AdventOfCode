@@ -16,6 +16,10 @@ extension Int {
             return self + amountToAdd
         }
     }
+
+    public func clamped(to range: ClosedRange<Int>) -> Int {
+        [range.lowerBound, range.upperBound, self].sorted()[1]
+    }
 }
 
 public func gcd(_ a: Int, _ b: Int) -> Int {
