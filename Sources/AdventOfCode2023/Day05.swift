@@ -15,7 +15,8 @@ struct Day05: AdventDay {
             .split(separator: " ")
             .compactMap { Int($0) }
 
-        maps = sections.dropFirst().compactMap { Map(section: $0) }
+        maps = sections.dropFirst()
+            .compactMap { Map(section: $0) }
     }
 
     func mapThroughAll(_ value: Int) -> Int {
@@ -59,12 +60,14 @@ struct Day05: AdventDay {
 }
 
 extension Day05 {
-    struct Map {
+    struct Map: CustomStringConvertible {
         var mappings: [MappedRange]
 
         init?(section: Substring) {
-            var lines = section.lines
-            mappings = lines.dropFirst().compactMap { MappedRange(line: $0) }
+            let lines = section.lines
+            mappings = lines.dropFirst()
+                .compactMap { MappedRange(line: $0) }
+                .sorted(on: \.sourceStart)
         }
 
         init() {
@@ -87,6 +90,34 @@ extension Day05 {
         }
 
         mutating func compose(with input: MappedRange) {
+            var remainingInput = input
+            var newMappings = self.mappings.sorted(on: \.destStart)
+
+            var foundStart = false
+            var foundEnd = false
+            for mapping in newMappings {
+                let overlap = mapping.destRange.intersection(remainingInput.sourceRange)
+
+                if !foundStart {
+                    if remainingInput.sourceStart < mapping.destStart {
+                        // The input starts before this mapping. Just insert that portion.
+                        let prefixInput = MappedRange(sourceRange: remainingInput.sourceStart..<mapping.destStart,
+                                                      offset: remainingInput.offset)
+                        newMappings.append(prefixInput)
+                        remainingInput.discardBefore(source: mapping.destStart)
+                        foundStart = true
+                    }
+                    else if remainingInput.sourceStart < mapping.sourceEnd {
+                        // the input starts _within_ this mapping. Split this mapping in half
+//                        let prefix = mapping.discardAfter(dest: remainingInput.sourceStart)
+                        foundStart = true
+                    }
+                }
+
+            }
+        }
+
+        mutating func compose2(with input: MappedRange) {
             var mappingsToInsert: [MappedRange] = []
 
             var remainingInputs = [input]
@@ -110,6 +141,10 @@ extension Day05 {
 
             mappings.insert(contentsOf: mappingsToInsert, at: 0)
         }
+
+        var description: String {
+            mappings.map(\.description).joined(separator: "\n")
+        }
     }
 
     struct MappedRange: Hashable {
@@ -127,25 +162,61 @@ extension Day05 {
         }
 
         var sourceEnd: Int { sourceRange.upperBound }
+        var destEnd: Int { destRange.upperBound }
 
         func remainders(outside input: Range<Int>) -> [MappedRange] {
             var results: [MappedRange] = []
 
             if sourceStart < input.lowerBound,
-               let lowerRemainder = self.split(atSource: sourceStart).first
+               let lowerRemainder = self.split(atSource: sourceStart).before
             {
                 results.append(lowerRemainder)
             }
             if input.upperBound < sourceRange.upperBound,
-               let upperRemainder = self.split(atSource: input.upperBound).last
+               let upperRemainder = self.split(atSource: input.upperBound).after
             {
                 results.append(upperRemainder)
             }
             return results
         }
 
-        func split(atSource value: Int) -> [MappedRange] {
-            guard sourceRange.contains(value) else { return [self] }
+        mutating func discardBefore(source value: Int) {
+            let clampedValue = value.clamped(to: sourceStart...sourceEnd)
+
+            let delta = clampedValue - sourceStart
+            sourceStart += delta
+            length -= delta
+        }
+
+        mutating func discardBefore(dest value: Int) {
+            let clampedValue = value.clamped(to: destStart...destEnd)
+
+            let delta = clampedValue - destStart
+            sourceStart += delta
+            length -= delta
+        }
+
+        mutating func discardAfter(source value: Int) {
+            let clampedValue = value.clamped(to: sourceStart...sourceEnd)
+
+            let delta = sourceEnd - clampedValue
+            length -= delta
+        }
+
+        mutating func discardAfter(dest value: Int) {
+            let clampedValue = value.clamped(to: destStart...destEnd)
+
+            let delta = destEnd - clampedValue
+            length -= delta
+        }
+
+
+
+        func split(atSource value: Int) -> (before: MappedRange?, after: MappedRange?) {
+            guard sourceRange.contains(value) else {
+                if sourceRange.upperBound <= value { return (self, nil) }
+                else { return (nil, self) }
+            }
 
             var lower = self
             var upper = self
@@ -154,11 +225,14 @@ extension Day05 {
             upper.sourceStart = value
             upper.length = sourceRange.upperBound - value
 
-            return [lower, upper]
+            return (lower, upper)
         }
 
-        func split(atDestination value: Int) -> [MappedRange] {
-            guard destRange.contains(value) else { return [self] }
+        func split(atDestination value: Int) -> (before: MappedRange?, after: MappedRange?) {
+            guard destRange.contains(value) else {
+                if destRange.upperBound <= value { return (self, nil) }
+                else { return (nil, self) }
+            }
             return split(atSource: value - offset)
         }
 
