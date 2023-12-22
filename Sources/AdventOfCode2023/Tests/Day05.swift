@@ -54,48 +54,65 @@ final class Day05Tests: XCTestCase {
         XCTAssertEqual(answer, 46)
     }
 
-//    func testCompsingMappings() {
-//        var map1 = Day05.Map()
-//        map1.mappings = [
-//            .init(sourceRange: 3..<8, offset: 10)
-//        ]
-//        
-//        var map2 = Day05.Map()
-//        map2.mappings = [
-//            .init(sourceRange: 13..<15, offset: 15)
-//        ]
-//
-//        let composed = map1.composed(with: map2)
-//
-//        let expectedResults = [
-//            (0, 0),
-//            (1, 1),
-//            (2, 2),
-//            (3, 28),
-//            (4, 29),
-//            (5, 15),
-//            (6, 16),
-//            (7, 17),
-//            (8, 8),
-//            (9, 9)
-//        ]
-//
-//        for (x, y) in expectedResults {
-//            XCTAssertEqual(composed.value(for: x), y)
-//        }
-//    }
-//
-//    func testComposingIntoEmpty() {
-//        var map1 = Day05.Map()
-//        map1.mappings = []
-//
-//        var map2 = Day05.Map()
-//        map2.mappings = [
-//            .init(sourceRange: 13..<15, offset: 15)
-//        ]
-//
-//        let composed = map1.composed(with: map2)
-//
-//        XCTAssertEqual(composed.mappings, map2.mappings)
-//    }
+    func testCompsingMappings() {
+        var map1 = Day05.Map()
+        map1.insert(.init(sourceRange: 3..<8, offset: 10))
+
+        var map2 = Day05.Map()
+        map2.insert( .init(sourceRange: 13..<15, offset: 15))
+
+        let composed = map1.composed(with: map2)
+
+        let expectedResults = [
+            (0, 0),
+            (1, 1),
+            (2, 2),
+            (3, 28),
+            (4, 29),
+            (5, 15),
+            (6, 16),
+            (7, 17),
+            (8, 8),
+            (9, 9)
+        ]
+
+        for (x, y) in expectedResults {
+            XCTAssertEqual(composed.value(for: x), y)
+        }
+    }
+
+    func testIterativeMaps() {
+        let day = Day05(data: testData)
+
+        let compositions = day.maps.reductions(Day05.Map()) { a, b in
+            a.composed(with: b)
+        }
+
+        let prefixes = day.maps.reductions([]) { r, map in
+            r + [map]
+        }
+
+        let pairs = zip(compositions, prefixes)
+
+        for (composed, path) in pairs {
+            for i in 0..<100 {
+                let c = composed.value(for: i)
+                let p = path.reduce(i) { partialResult, map in
+                    map.value(for: partialResult)
+                }
+                XCTAssertEqual(c, p)
+            }
+        }
+    }
+
+    func testComposingIntoEmpty() {
+        let map1 = Day05.Map()
+
+        var map2 = Day05.Map()
+        map2.insert(.init(sourceRange: 13..<15, offset: 15))
+
+        let composed = map1.composed(with: map2)
+
+        XCTAssertEqual(composed.mappedRanges, map2.mappedRanges)
+    }
 }

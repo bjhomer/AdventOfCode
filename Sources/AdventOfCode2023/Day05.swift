@@ -1,11 +1,12 @@
 import Algorithms
+import SE0270_RangeSet
 import AdventCore
 import Foundation
 
 struct Day05: AdventDay {
 
-    private var seeds: [Int]
-    private var maps: [Map]
+    var seeds: [Int]
+    var maps: [Map]
 
     init(data: String) {
         let sections = data.split(separator: "\n\n")
@@ -29,39 +30,54 @@ struct Day05: AdventDay {
 
     func part1() -> Int {
         let paths = seeds.map { seed in maps.reductions(seed, { $1.value(for: $0) }) }
-        for path in paths {
-            print(path.map(String.init).joined(separator: " -> "))
-        }
+//        for path in paths {
+//            print(path.map(String.init).joined(separator: " -> "))
+//        }
         return paths.compactMap(\.last).min()!
     }
 
     func part2() -> Int {
 
-        var composedMap = maps.reduce { $0.composed(with: $1) }!
-        print(composedMap.mappings)
+        let composedMap = maps.reduce { $0.composed(with: $1) }!
 
         let seedPairs = seeds.chunks(ofCount: 2)
-        let ranges = seedPairs.map { pair in
+        let seedRanges = seedPairs.map { pair in
             let (start, length) = pair.explode()!
             return Range(start: start, length: length)
         }
 
-        var min = Int.max
-        for range in ranges {
-            for value in range {
-                let result = composedMap.value(for: value)
-//                let result = mapThroughAll(value)
-                print("mapping \(value)->\(result)")
-                if result < min { min = result }
-            }
-        }
-        return min
+//        print(composedMap)
+
+        let mappedRanges = composedMap.mappedRanges.sorted(on: \.destStart)
+
+        let result = mappedRanges
+            .firstNonNil { (mappedRange) in
+                seedRanges
+                    .compactMap { $0.intersection(mappedRange.sourceRange) }
+                    .sorted(on: \.lowerBound)
+                    .first
+            }!
+
+        let path = maps.reductions(result.lowerBound, { $1.value(for: $0) })
+        print(path.map(String.init).joined(separator: " -> "))
+        print(composedMap.offset(for: result.lowerBound))
+        return composedMap.value(for: result.lowerBound)
+
+//        for range in mappedRanges {
+//            seedRanges.first(where: { range.overlaps })
+//        }
     }
 }
 
 extension Day05 {
     struct Map: CustomStringConvertible {
-        var mappings: RangeDict<Int>
+        var rangeOffsets: RangeDict<Int>
+
+        var mappedRanges: [MappedRange] {
+            rangeOffsets.ranges
+                .map { MappedRange(sourceRange: $0, offset: rangeOffsets[$0.lowerBound] ?? 0)
+                }
+        }
 
         init?(section: Substring) {
             let lines = section.lines
@@ -69,95 +85,71 @@ extension Day05 {
                 .compactMap { MappedRange(line: $0) }
                 .sorted(on: \.sourceStart)
 
-            mappings = .init()
+            rangeOffsets = .init()
 
             for mappedRange in ranges {
-                mappings.setRange(mappedRange.sourceRange, to: mappedRange.offset)
+                rangeOffsets.setRange(mappedRange.sourceRange, to: mappedRange.offset)
             }
         }
 
         init() {
-            mappings = .init()
+            rangeOffsets = .init()
+        }
+
+        func offset(for source: Int) -> Int {
+            return rangeOffsets[source] ?? 0
         }
 
         func value(for source: Int) -> Int {
-            if let offset = mappings[source] {
+            if let offset = rangeOffsets[source] {
                 return source + offset
             }
             return source
         }
 
+        mutating func insert(_ range: MappedRange) {
+            rangeOffsets.setRange(range.sourceRange, to: range.offset)
+        }
+
         func composed(with other: Map) -> Map {
             var result = self
-//            for mapping in other.mappings {
-//                result.compose(with: mapping)
-//            }
+
+            let rangesToApply = other.mappedRanges.flatMap { mappedRanges(forApplying:$0) }
+
+            for range in rangesToApply {
+                result.insert(range)
+            }
+//            print("Composed Map:")
+//            print(result)
+//            print("")
             return result
         }
 
-        mutating func compose(with input: MappedRange) {
+        func mappedRanges(forApplying input: MappedRange) -> [MappedRange] {
 
-            for range in mappings.ranges {
-                let destRange = range.offset(by: mappings[range.lowerBound] ?? 0)
-                if destRange.overlaps(input.sourceRange) {
-                    mappings.updateRange(range) { $0.map { $0 + input.offset } ?? 0 }
+            var remainder = RangeSet(input.sourceRange)
+            var results: [MappedRange] = []
+
+            for range in mappedRanges {
+                let rangeOffset = range.offset
+
+                let inputRangeInSource = input.sourceRange.offset(by: -rangeOffset)
+                if let overlap = range.sourceRange.intersection(inputRangeInSource) {
+                    results.append(.init(sourceRange: overlap, offset: range.offset + input.offset))
+                    remainder.remove(contentsOf: overlap.offset(by: rangeOffset))
                 }
             }
-//
-//            var remainingInput = input
-//            var newMappings = self.mappings.sorted(on: \.destStart)
-//
-//            var foundStart = false
-//            var foundEnd = false
-//            for mapping in newMappings {
-//                let overlap = mapping.destRange.intersection(remainingInput.sourceRange)
-//
-//                if !foundStart {
-//                    if remainingInput.sourceStart < mapping.destStart {
-//                        // The input starts before this mapping. Just insert that portion.
-//                        let prefixInput = MappedRange(sourceRange: remainingInput.sourceStart..<mapping.destStart,
-//                                                      offset: remainingInput.offset)
-//                        newMappings.append(prefixInput)
-//                        remainingInput.discardBefore(source: mapping.destStart)
-//                        foundStart = true
-//                    }
-//                    else if remainingInput.sourceStart < mapping.sourceEnd {
-//                        // the input starts _within_ this mapping. Split this mapping in half
-////                        let prefix = mapping.discardAfter(dest: remainingInput.sourceStart)
-//                        foundStart = true
-//                    }
-//                }
-//
-//            }
-        }
-
-        mutating func compose2(with input: MappedRange) {
-//            var mappingsToInsert: [MappedRange] = []
-//
-//            var remainingInputs = [input]
-//
-//            for i in 0..<mappings.count {
-//                let mapping = mappings[i]
-//
-//                for input in remainingInputs {
-//                    guard let overlapInDest = mapping.destRange.intersection(input.sourceRange)
-//                    else { continue }
-//
-//                    let overlapInSource = overlapInDest.offset(by: -mapping.offset)
-//                    mappingsToInsert.append(.init(sourceRange: overlapInSource, offset: mapping.offset + input.offset))
-//                    remainingInputs = input.remainders(outside: overlapInDest)
-//                }
-//            }
-//
-//            if remainingInputs.isEmpty == false {
-//                mappingsToInsert.append(contentsOf: remainingInputs)
-//            }
-//
-//            mappings.insert(contentsOf: mappingsToInsert, at: 0)
+            for range in remainder.ranges {
+                results.append(.init(sourceRange: range, offset: input.offset))
+            }
+            return results
         }
 
         var description: String {
-            mappings.ranges.map(\.description).joined(separator: "\n")
+            mappedRanges
+                .sorted(on: \.destStart)
+                .map(\.description)
+                .joined(separator: "\n")
         }
     }
 
@@ -282,6 +274,6 @@ extension Day05 {
 
 extension Day05.MappedRange: CustomStringConvertible {
     var description: String {
-        return "(\(sourceRange) + \(offset))"
+        return "\(sourceRange.description.padding(toLength: 30, withPad: " ", startingAt: 0)) \(destStart)"
     }
 }
