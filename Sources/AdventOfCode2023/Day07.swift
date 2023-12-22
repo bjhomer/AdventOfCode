@@ -7,11 +7,16 @@ import Collections
 struct Day07: AdventDay {
 
     var handBids: [HandBid]
+    var handBidsWithJokers: [HandBid]
 
     init(data: String) {
         handBids = data
             .lines
             .compactMap { HandBid(line: $0) }
+
+        handBidsWithJokers = data
+            .lines
+            .compactMap { HandBid(line: $0, jokers: true) }
     }
 
     func part1() -> Int {
@@ -27,7 +32,15 @@ struct Day07: AdventDay {
     }
 
     func part2() -> Int {
-        0
+        let values = handBidsWithJokers
+            .sorted(on: \.hand)
+            .enumerated()
+            .map { (i, handBid) in
+                (handBid.hand, (i+1) * handBid.bid)
+            }
+
+        let result = values.map(\.1).reduce(0,+)
+        return result
     }
 }
 
@@ -36,10 +49,13 @@ extension Day07 {
     struct Hand: Comparable, CustomDebugStringConvertible, CustomStringConvertible {
 
         var cards: [Card]
+        var usesJokers: Bool
+
         var type: HandType { .init(self) }
 
-        init(_ str: Substring) {
-            cards = str.compactMap { Card($0) }
+        init(_ str: Substring, jokers: Bool = false) {
+            cards = str.compactMap { Card($0, jokers: jokers) }
+            usesJokers = jokers
         }
 
         static func < (lhs: Day07.Hand, rhs: Day07.Hand) -> Bool {
@@ -72,14 +88,30 @@ extension Day07 {
         var value: Int { rawValue + 1 }
 
         init(_ hand: Hand) {
-            let cardCounts = hand.cards
+            var cardCounts = hand.cards
                 .grouped(by: { $0 })
-                .map { $0.value.count }
+                .mapValues { $0.count }
+
+            if hand.usesJokers {
+                let joker = Card("J", jokers: true)
+                let jokerCount = cardCounts[joker] ?? 0
+                cardCounts[joker] = 0
+                let nextHighest = cardCounts
+                    .sorted(on: \.value)
+                    .last!
+                    .key
+                cardCounts[nextHighest, default: 0] += jokerCount
+            }
+
+            let groupCounts = cardCounts
+                .map { $0.value }
                 .sorted()
+                .drop(while: { $0 == 0 })
                 .reversed()
                 .collect()
 
-            self = switch cardCounts {
+
+            self = switch groupCounts {
             case [5]: .fiveOfAKind
             case [4, 1]: .fourOfAKind
             case [3, 2]: .fullHouse
@@ -100,26 +132,27 @@ extension Day07 {
         var hand: Hand
         var bid: Int
 
-        init?(line: Substring) {
+        init?(line: Substring, jokers: Bool = false) {
             guard let (handStr, bidStr) = line.split(separator: " ").explode()
             else { return nil }
 
-            hand = Hand(handStr)
+            hand = Hand(handStr, jokers: jokers)
             bid = Int(bidStr)!
         }
     }
 
     struct Card: Comparable, Hashable, CustomDebugStringConvertible {
+
         var value: Int
 
-        init?(_ char: Character) {
+        init(_ char: Character, jokers: Bool = false) {
             switch char {
             case let x where x.isWholeNumber:
                 value = x.wholeNumberValue!
             case "T":
                 value = 10
             case "J":
-                value = 11
+                value = jokers ? 1 : 11
             case "Q":
                 value = 12
             case "K":
@@ -127,7 +160,7 @@ extension Day07 {
             case "A":
                 value = 14
             default:
-                return nil
+                fatalError()
             }
         }
 
@@ -137,6 +170,7 @@ extension Day07 {
 
         var debugDescription: String {
             switch value {
+            case 1: return "J"
             case 2...9: return "\(value)"
             case 10: return "T"
             case 11: return "J"

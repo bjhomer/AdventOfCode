@@ -33,6 +33,23 @@ final class Day07Tests: XCTestCase {
         }
     }
 
+    func testParsingHandTypesWithJokers() {
+        let tests: [(String, Day07.HandType)] = [
+            ("J23K5", .onePair),
+            ("T55J5", .fourOfAKind),
+            ("32T3K", .onePair),
+            ("KK677", .twoPair),
+            ("KTJJT", .fourOfAKind),
+            ("QQQJA", .fourOfAKind),
+        ]
+
+        for (str, expectedType) in tests {
+            let hand = Day07.Hand(str[...], jokers: true)
+            let type = Day07.HandType(hand)
+            XCTAssertEqual(type, expectedType)
+        }
+    }
+
     func testSortingHands() {
         let testHands = [
             "57A83",
@@ -108,6 +125,6 @@ final class Day07Tests: XCTestCase {
     func testPart2() throws {
         let challenge = Day07(data: testData)
         let answer = challenge.part2()
-//        XCTAssertEqual(answer, 71503)
+        XCTAssertEqual(answer, 5905)
     }
 }
