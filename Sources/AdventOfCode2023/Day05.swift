@@ -46,8 +46,6 @@ struct Day05: AdventDay {
             return Range(start: start, length: length)
         }
 
-//        print(composedMap)
-
         let mappedRanges = composedMap.mappedRanges.sorted(on: \.destStart)
 
         let result = mappedRanges
@@ -58,14 +56,7 @@ struct Day05: AdventDay {
                     .first
             }!
 
-        let path = maps.reductions(result.lowerBound, { $1.value(for: $0) })
-        print(path.map(String.init).joined(separator: " -> "))
-        print(composedMap.offset(for: result.lowerBound))
         return composedMap.value(for: result.lowerBound)
-
-//        for range in mappedRanges {
-//            seedRanges.first(where: { range.overlaps })
-//        }
     }
 }
 
