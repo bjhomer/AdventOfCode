@@ -18,7 +18,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "1.2.0")),
-        .package(url: "https://github.com/apple/swift-algorithms", .upToNextMajor(from: "1.0.0")),
+        .package(url: "https://github.com/apple/swift-algorithms", .upToNextMajor(from: "1.2.0")),
         .package(url: "https://github.com/apple/swift-async-algorithms", .upToNextMajor(from: "0.0.3")),
         .package(url: "https://github.com/davecom/SwiftGraph", .upToNextMajor(from: "3.0.0")),
         .package(url: "https://github.com/apple/swift-standard-library-preview.git", from: "0.0.3"),
