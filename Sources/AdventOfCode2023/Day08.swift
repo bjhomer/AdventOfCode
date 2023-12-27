@@ -34,24 +34,37 @@ struct Day08: AdventDay {
     }
 
     func part2() -> Int {
-        var currentNodes = nodes.keys
+        let currentNodes = nodes.keys
             .filter { $0.hasSuffix("A") }
             .map { nodes[$0]! }
 
-        var stepCount = 0
-        for step in instructions.cycled() {
-            if currentNodes.allSatisfy({ $0.name.hasSuffix("Z") }) { break }
-            switch step {
-            case "L": 
-                currentNodes = currentNodes.map { nodes[$0.left]! }
-            case "R":
-                currentNodes = currentNodes.map { nodes[$0.right]! }
-            default: fatalError()
-            }
-            stepCount += 1
-        }
-        return stepCount
+        let cycleLengths = currentNodes
+            .map { cycleLength(startingAt: $0.name) }
 
+        let combinedLCM = cycleLengths.reduce(1, lcm)
+
+        return combinedLCM * instructions.count
+    }
+
+    func cycleLength(startingAt start: String) -> Int {
+        var current = nodes[start]!
+
+        var count = 0
+
+        while true {
+            for step in instructions {
+                switch step {
+                case "L": current = nodes[current.left]!
+                case "R": current = nodes[current.right]!
+                default: fatalError()
+                }
+            }
+            count += 1
+            if current.name.hasSuffix("Z") {
+                break
+            }
+        }
+        return count
     }
 }
 
