@@ -22,6 +22,9 @@ public extension StringProtocol {
     var lines: [SubSequence] {
         return self.split(separator: "\n")
     }
+
+    var int: Int? { Int(self) }
+    var forceInt: Int { Int(self)! }
 }
 
 public extension Substring {

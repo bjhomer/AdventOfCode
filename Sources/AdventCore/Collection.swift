@@ -199,6 +199,16 @@ public extension Collection where Element: Hashable {
     }
 }
 
+public extension Collection where Element: Comparable {
+    var isSortedAscending: Bool {
+        adjacentPairs().allSatisfy({ $0.0 < $0.1})
+    }
+
+    var isSortedDescending: Bool {
+        adjacentPairs().allSatisfy({ $0.0 > $0.1})
+    }
+}
+
 extension Sequence {
     public func sorted<T: Comparable>(on block: (Element)->T) -> [Element] {
         return self.sorted(by: { block($0) < block($1) })
