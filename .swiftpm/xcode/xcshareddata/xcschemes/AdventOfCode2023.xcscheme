@@ -57,7 +57,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:.swiftpm/AdventOfCode.xctestplan"
+            reference = "container:.swiftpm/AdventOfCode2023.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

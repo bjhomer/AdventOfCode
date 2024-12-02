@@ -238,7 +238,7 @@ extension AsyncSequence {
 }
 
 extension AsyncSequence where Element: Equatable, Element: Sendable {
-    public func split(separator: Element, isolation: isolated (any Actor) = #isolation) async -> AsyncThrowingStream<[Element], Error> {
+    public func split(separator: Element) async -> AsyncThrowingStream<[Element], Error> {
         let iteratorBox = SendableBox(self.makeAsyncIterator())
 
         return AsyncThrowingStream {

@@ -1,39 +1,38 @@
 import XCTest
 @testable import AdventCore
 import AsyncAlgorithms
+import Testing
 
-final class AdventCoreTests: XCTestCase {
-    func testExample() {
+struct AdventCoreTests {
+    @Test
+    func testSplitSeparator() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
 
         let pieces = "123 45 - 678 - 910".split(separator: " - ")
 
-        XCTAssert(pieces[0] == "123 45")
-        XCTAssert(pieces[1] == "678")
-        XCTAssert(pieces[2] == "910")
-
+        #expect(pieces[0] == "123 45")
+        #expect(pieces[1] == "678")
+        #expect(pieces[2] == "910")
     }
 
+    @Test
     func testSplitAsyncSequence() async throws {
         let sequences = try await [10, 20, 30, 0, 20, 30, 40, 0, 20]
             .async
             .split(separator: 0)
             .collect()
 
-        XCTAssertEqual(sequences, [[10, 20, 30], [20, 30, 40], [20]])
+        #expect(sequences == [[10, 20, 30], [20, 30, 40], [20]])
     }
 
+    @Test
     func testOperators() {
         let result = "abc2334defg"
             .filter { $0.isWholeNumber }
         |> { Int($0) }
 
-        XCTAssertEqual(result, 2334)
+        #expect(result == 2334)
     }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }

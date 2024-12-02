@@ -1,0 +1,35 @@
+{
+  "configurations" : [
+    {
+      "id" : "B1452B26-92D5-41C0-B347-7E85F98F4437",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:",
+      "identifier" : "AdventOfCode2024",
+      "name" : "AdventOfCode2024"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AdventCoreTests",
+        "name" : "AdventCoreTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "Advent2024Tests",
+        "name" : "Advent2024Tests"
+      }
+    }
+  ],
+  "version" : 1
+}
