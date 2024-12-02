@@ -1,17 +1,10 @@
 import ArgumentParser
 import AdventCore
+import Foundation
 
 // Add each new day implementation to this array:
 let allChallenges: [any AdventDay] = [
-  Day00(),
-  Day01(),
-  Day02(),
-  Day03(),
-  Day04(),
-  Day05(),
-  Day06(),
-  Day07(),
-  Day08(),
+  Day01()
 ]
 
 @main
@@ -67,11 +60,11 @@ struct AdventOfCode: AsyncParsableCommand {
 
   func run() async throws {
     let challenges =
-      if all {
-        allChallenges
-      } else {
-        try [selectedChallenge]
-      }
+    if all {
+      allChallenges
+    } else {
+      try [selectedChallenge]
+    }
 
     for challenge in challenges {
       print("Executing Advent of Code challenge \(challenge.day)...")
@@ -81,10 +74,15 @@ struct AdventOfCode: AsyncParsableCommand {
 
       if benchmark {
         print("Part 1 took \(timing1), part 2 took \(timing2).")
-        #if DEBUG
-          print("Looks like you're benchmarking debug code. Try swift run -c release")
-        #endif
+#if DEBUG
+        print("Looks like you're benchmarking debug code. Try swift run -c release")
+#endif
       }
     }
   }
+}
+
+
+extension AdventDay {
+  static var inputDataBundle: Bundle { Bundle.module }
 }

@@ -2,7 +2,7 @@
 @_exported import Collections
 import Foundation
 
-protocol AdventDay {
+public protocol AdventDay: Sendable {
   associatedtype Answer = Int
 
   /// The day of the Advent of Code challenge.
@@ -10,6 +10,8 @@ protocol AdventDay {
   /// You can implement this property, or, if your type is named with the
   /// day number as its suffix (like `Day01`), it is derived automatically.
   static var day: Int { get }
+
+  static var inputDataBundle: Bundle { get }
 
   /// An initializer that uses the provided test data.
   init(data: String)
@@ -21,12 +23,12 @@ protocol AdventDay {
   func part2() async throws -> Answer
 }
 
-struct PartUnimplemented: Error {
-  let day: Int
-  let part: Int
+public struct PartUnimplemented: Error {
+    public let day: Int
+    public let part: Int
 }
 
-extension AdventDay {
+public extension AdventDay {
   // Find the challenge day from the type name.
   static var day: Int {
     let typeName = String(reflecting: Self.self)
@@ -61,7 +63,7 @@ extension AdventDay {
   static func loadData(challengeDay: Int) -> String {
     let dayString = String(format: "%02d", challengeDay)
     let dataFilename = "Day\(dayString)"
-    let dataURL = Bundle.module.url(
+    let dataURL = inputDataBundle.url(
       forResource: dataFilename,
       withExtension: "txt",
       subdirectory: "Inputs")

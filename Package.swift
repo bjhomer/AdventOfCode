@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -14,24 +14,28 @@ let dependencies: [Target.Dependency] = [
 
 let package = Package(
     name: "AdventOfCode",
-    platforms: [.macOS(.v13)],
+    platforms: [.macOS(.v15)],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "1.2.0")),
+        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "1.5.0")),
         .package(url: "https://github.com/apple/swift-algorithms", .upToNextMajor(from: "1.2.0")),
         .package(url: "https://github.com/apple/swift-async-algorithms", .upToNextMajor(from: "0.0.3")),
         .package(url: "https://github.com/davecom/SwiftGraph", .upToNextMajor(from: "3.0.0")),
         .package(url: "https://github.com/apple/swift-standard-library-preview.git", from: "0.0.3"),
-        .package(url: "https://github.com/apple/swift-collections.git", branch: "release/1.1"),
+        .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.4"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
+        .executableTarget(name: "AdventOfCode2024",
+                          dependencies: ["AdventCore"] + dependencies,
+                          exclude: ["Tests"],
+                          resources: [.copy("Inputs")]
+                         ),
        .executableTarget(name: "AdventOfCode2023",
                          dependencies: ["AdventCore"] + dependencies,
                          exclude: ["Tests"],
-                         resources: [.copy("Inputs")],
-                         swiftSettings: [.enableUpcomingFeature("BareSlashRegexLiterals")]
+                         resources: [.copy("Inputs")]
                         ),
         .executableTarget(name: "AdventOfCode2022",
                           dependencies: ["AdventCore"] + dependencies,
@@ -44,7 +48,8 @@ let package = Package(
                 exclude: ["Inputs"]),
         .target(
             name: "AdventCore",
-            dependencies: dependencies),
+            dependencies: dependencies
+        ),
         .testTarget(
             name: "AdventCoreTests",
             dependencies: ["AdventCore"]),
@@ -52,8 +57,14 @@ let package = Package(
             name: "Advent2023Tests",
             dependencies: ["AdventOfCode2023"] + dependencies,
             path: "Sources/AdventOfCode2023/Tests"
+        ),
+        .testTarget(
+            name: "Advent2024Tests",
+            dependencies: ["AdventOfCode2024"] + dependencies,
+            path: "Sources/AdventOfCode2024/Tests"
         )
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
 
 

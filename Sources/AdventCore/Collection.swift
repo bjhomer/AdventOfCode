@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Collection.swift
 //  
 //
 //  Created by BJ Homer on 12/6/20.
@@ -227,12 +227,14 @@ extension AsyncSequence {
     }
 }
 
-extension AsyncSequence where Element: Equatable {
-    public func split(separator: Element) async -> AsyncThrowingStream<[Element], Error> {
-        var iterator = self.makeAsyncIterator()
+extension AsyncSequence where Element: Equatable, Element: Sendable {
+    public func split(separator: Element, isolation: isolated (any Actor) = #isolation) async -> AsyncThrowingStream<[Element], Error> {
+        let iteratorBox = SendableBox(self.makeAsyncIterator())
 
         return AsyncThrowingStream {
             var items: [Element] = []
+
+            var iterator = iteratorBox.value
             while let item = try await iterator.next() {
                 if item == separator {
                     return items

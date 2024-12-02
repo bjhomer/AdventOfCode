@@ -10,7 +10,7 @@ import Foundation
 public struct JSONObject: Codable, Hashable {
     private var dict: [String: JSONValue]
 
-    public init(_ dict: [String: Any]) throws {
+    public init(_ dict: [String: any Sendable]) throws {
         self.dict = try dict.mapValues({ try JSONValue($0) })
     }
 
@@ -33,12 +33,8 @@ public struct JSONObject: Codable, Hashable {
     }
 
     public init(with data: Data) throws {
-        let any = try JSONSerialization.jsonObject(with: data)
-        guard let dict = any as? [String: Any] else {
-            throw JSONValue.JSONError.valueIsNotJSON(any)
-        }
-
-        try self.init(dict)
+        let decoder = JSONDecoder()
+        dict = try decoder.decode([String: JSONValue].self, from: data)
     }
 
     public init(with string: String) throws {
@@ -119,11 +115,11 @@ public enum JSONValue: Codable, Hashable {
     case array([JSONValue])
     case object(JSONObject)
 
-    enum JSONError: Error {
-        case valueIsNotJSON(Any)
+    enum JSONError<T: Sendable>: Error {
+        case valueIsNotJSON(T)
     }
 
-    public init(_ value: Any) throws {
+    public init(_ value: any Sendable) throws {
         switch value {
         case let x as NSNumber where x.isBool: self = .bool(x.boolValue)
         case let x as Int: self = .int(x)
@@ -131,8 +127,8 @@ public enum JSONValue: Codable, Hashable {
         case let x as String: self = .string(x)
         case let x as Bool: self = .bool(x)
         case is NSNull: self = .null
-        case let x as [Any]: self = .array(try x.map({ try JSONValue($0) }))
-        case let x as [String: Any]: self = .object(try JSONObject(x))
+        case let x as [any Sendable]: self = .array(try x.map({ try JSONValue($0) }))
+        case let x as [String: any Sendable]: self = .object(try JSONObject(x))
         case let x as Any? where x == nil: self = .null
         default: throw JSONError.valueIsNotJSON(value)
         }
@@ -287,8 +283,7 @@ extension JSONValue: CustomReflectable {
 
 extension JSONValue {
     public init(with jsonData: Data) throws {
-        let jsonObj = try JSONSerialization.jsonObject(with: jsonData)
-        try self.init(jsonObj)
+        self = .object(try JSONObject(with: jsonData))
     }
 }
 
