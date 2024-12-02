@@ -98,12 +98,21 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
+            BlueprintIdentifier = "Advent2023"
+            BuildableName = "Advent2023"
+            BlueprintName = "Advent2023"
+            ReferencedContainer = "container:">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "AdventOfCode2023"
             BuildableName = "AdventOfCode2023"
             BlueprintName = "AdventOfCode2023"
             ReferencedContainer = "container:">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--benchmark"
@@ -127,6 +136,15 @@
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "AdventOfCode2023"
+            BuildableName = "AdventOfCode2023"
+            BlueprintName = "AdventOfCode2023"
+            ReferencedContainer = "container:">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -23,14 +23,14 @@ struct Advent: AsyncParsableCommand {
     var inputFile: URL { sample ? sampleFile : problemFile }
 
     var problemFile: URL {
-        let thisFile = URL(fileURLWithPath: #file)
+        let thisFile = URL(fileURLWithPath: #filePath)
         let inputsDir = thisFile.deletingLastPathComponent().appendingPathComponent("Inputs/")
         let inputFile = inputsDir.appendingPathComponent("Day\(day).txt")
         return inputFile
     }
 
     var sampleFile: URL {
-        let thisFile = URL(fileURLWithPath: #file)
+        let thisFile = URL(fileURLWithPath: #filePath)
         let inputsDir = thisFile.deletingLastPathComponent().appendingPathComponent("Inputs/")
         let inputFile = inputsDir.appendingPathComponent("Day\(day)Sample.txt")
         return inputFile

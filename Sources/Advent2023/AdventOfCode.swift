@@ -92,5 +92,5 @@ struct AdventOfCode: AsyncParsableCommand {
 }
 
 extension AdventDay {
-    static var inputDataBundle: Bundle { Bundle.main }
+    static var inputDataBundle: Bundle { Bundle.module }
 }

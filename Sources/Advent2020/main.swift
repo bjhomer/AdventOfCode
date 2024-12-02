@@ -14,7 +14,7 @@ struct Advent: ParsableCommand {
     @Argument(help: "Which day should we run?") var day: Int = 16
 
     var inputFile: URL {
-        let thisFile = URL(fileURLWithPath:#file)
+        let thisFile = URL(fileURLWithPath:#filePath)
         let inputsDir = thisFile.deletingLastPathComponent().appendingPathComponent("Inputs/")
         let inputFile = inputsDir.appendingPathComponent("Day\(day).txt")
         return inputFile
