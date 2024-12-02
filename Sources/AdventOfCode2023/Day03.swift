@@ -1,8 +1,10 @@
 import Algorithms
 import AdventCore
 
-struct Day03: AdventDay {
+class NonSendable {}
 
+struct Day03: AdventDay {
+ 
     var grid: Grid<Character>
 
     init(data: String) {

@@ -7,7 +7,7 @@
 
 import Algorithms
 
-public struct GridPoint: Hashable, Codable, CustomStringConvertible {
+public struct GridPoint: Hashable, Codable, CustomStringConvertible, Sendable {
 
     public var r: Int
     public var c: Int
@@ -55,7 +55,7 @@ public struct GridPoint: Hashable, Codable, CustomStringConvertible {
     }
 }
 
-public struct Grid<T> {
+public struct Grid<T: Sendable>: Sendable {
     public typealias Index = GridPoint
 
     public let width: Int

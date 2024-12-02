@@ -61,7 +61,7 @@ struct Day05: AdventDay {
 }
 
 extension Day05 {
-    struct Map: CustomStringConvertible {
+    struct Map: CustomStringConvertible, Sendable {
         var rangeOffsets: RangeDict<Int>
 
         var mappedRanges: [MappedRange] {

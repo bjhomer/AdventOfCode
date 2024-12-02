@@ -46,7 +46,7 @@ private struct Limits {
     var green: Int
     var blue: Int
 
-    static var `default`: Limits = .init(red: 12, green: 13, blue: 14)
+    static let `default`: Limits = .init(red: 12, green: 13, blue: 14)
 }
 
 private struct Game {

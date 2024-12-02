@@ -11,7 +11,7 @@ import Collections
 
 /// Implements a dictionary where values can be applied to a range
 /// of values efficiently
-public struct RangeDict<Value> {
+public struct RangeDict<Value: Sendable>: Sendable {
     private var keys: [Int] = []
     private var storage: [Int: Value?] = [:]
 

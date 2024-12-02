@@ -239,12 +239,11 @@ extension AsyncSequence {
 
 extension AsyncSequence where Element: Equatable, Element: Sendable {
     public func split(separator: Element) async -> AsyncThrowingStream<[Element], Error> {
-        let iteratorBox = SendableBox(self.makeAsyncIterator())
+        nonisolated(unsafe) var iterator = self.makeAsyncIterator()
 
         return AsyncThrowingStream {
             var items: [Element] = []
 
-            var iterator = iteratorBox.value
             while let item = try await iterator.next() {
                 if item == separator {
                     return items
