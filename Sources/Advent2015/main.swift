@@ -13,7 +13,7 @@ struct Advent: ParsableCommand {
 
     func run() throws {
 
-        guard let str = try? String(contentsOf: inputFile) else {
+        guard let str = try? String(contentsOf: inputFile, encoding: .utf8) else {
             print("No data found at \(inputFile)")
             return
         }

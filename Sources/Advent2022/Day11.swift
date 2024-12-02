@@ -12,7 +12,7 @@ struct Day11: Day {
     private var monkeys: [Monkey]
 
     init(input: URL) async throws {
-        let monkeys = try String(contentsOf: input)
+        let monkeys = try String(contentsOf: input, encoding: .utf8)
             .split(separator: "\n\n")
             .compactMap { Monkey(description: $0) }
 

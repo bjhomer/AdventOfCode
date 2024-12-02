@@ -13,7 +13,7 @@ struct Day13: Day {
     private var pairs: [SignalPair]
 
     init(input: URL) async throws {
-        pairs = try String(contentsOf: input)
+        pairs = try String(contentsOf: input, encoding: .utf8)
             .split(separator: "\n\n")
             .compactMap { input -> SignalPair? in
                 guard let (s1, s2) = input.split(separator: "\n")
