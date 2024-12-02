@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ACRegex {
+public struct ACRegex: Sendable {
     public struct Match {
         private let result: NSTextCheckingResult
         private let string: NSString
