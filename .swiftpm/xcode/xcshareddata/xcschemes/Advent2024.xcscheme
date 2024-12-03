@@ -30,7 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Sources/AdventOfCode2024/Tests/Advent2024.xctestplan"
+            reference = "container:Sources/Advent2024/Tests/Advent2024.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
