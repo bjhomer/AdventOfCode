@@ -51,7 +51,5 @@ struct Day03: AdventDay {
             }
         }
         return result
-
-
     }
 }

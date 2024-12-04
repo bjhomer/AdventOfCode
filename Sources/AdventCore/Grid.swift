@@ -98,7 +98,7 @@ public struct Grid<T: Sendable>: Sendable {
     }
 
     public var indices: [Index] {
-        return Array(product(minR..<maxR, minC..<maxC).map { Index(r: $0.0, c: $0.1) })
+        return Array(product(minR...maxR, minC...maxC).map { Index(r: $0.0, c: $0.1) })
     }
 
     public subscript(row r: Int, column c: Int) -> T {
@@ -121,6 +121,10 @@ public struct Grid<T: Sendable>: Sendable {
 
     public enum Direction: CaseIterable, Equatable {
         case up, down, left, right
+        case upLeft, upRight, downLeft, downRight
+
+        public static var cardinals: [Direction] { [.up, .down, .left, .right] }
+        public static var diagonals: [Direction] { [.upLeft, .upRight, .downLeft, .downRight] }
 
         var offsets: (r: Int, c: Int) {
             switch self {
@@ -128,6 +132,23 @@ public struct Grid<T: Sendable>: Sendable {
             case .down: return (r: 1, c: 0)
             case .left: return (r: 0, c: -1)
             case .right: return (r: 0, c: 1)
+            case .upLeft:   return (r: -1, c: -1)
+            case .upRight:  return (r: -1, c: 1)
+            case .downLeft: return (r: 1, c: -1)
+            case .downRight: return (r: 1, c: 1)
+            }
+        }
+
+        public var inverse: Direction {
+            switch self {
+            case .up:   return .down
+            case .down: return .up
+            case .left: return .right
+            case .right: return .left
+            case .upLeft:   return .downRight
+            case .upRight:  return .downLeft
+            case .downLeft: return .upRight
+            case .downRight: return .upLeft
             }
         }
     }
@@ -173,7 +194,23 @@ public struct Grid<T: Sendable>: Sendable {
         }
 
         return current
+    }
 
+    public func values(from start: Index, direction: Direction, limit: Int? = nil) -> [T] {
+
+        var result: [T] = []
+        var current = start
+        while true {
+            if let limit, result.count >= limit { break }
+
+            result.append(self[current])
+            if let next = index(moved: direction, from: current) {
+                current = next
+            } else {
+                break
+            }
+        }
+        return result
     }
 }
 

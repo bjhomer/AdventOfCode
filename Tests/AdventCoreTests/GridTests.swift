@@ -43,4 +43,15 @@ final class GridTests: XCTestCase {
         XCTAssertEqual(rightExtent, G.Index(r: 0, c: 2))
     }
 
+    func testValuesInDirection() throws {
+        let start = G.Index(r: 0, c: 2)
+        
+        let values = grid.values(from: start, direction: .down, limit: 4)
+        XCTAssertEqual(values, ["7", ".", "3", "."])
+    }
+
+    func testIndices() throws {
+        let indices = grid.indices
+        XCTAssertEqual(indices.count, 100)
+    }
 }
