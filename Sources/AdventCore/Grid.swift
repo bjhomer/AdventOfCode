@@ -218,6 +218,22 @@ extension Grid where T: Equatable {
     public func firstIndex(of item: T) -> Index? {
         self.indices.first(where: { self[$0] == item })
     }
+
+    public func hasSequence(_ sequence: some Sequence<T>, from start: Index, direction: Direction) -> Bool {
+        var currentIndex: Index? = start
+        for item in sequence {
+            guard let index = currentIndex else {
+                // We walked off the end without finding it
+                return false
+            }
+            guard self[index] == item else {
+                // We found a value that didn't match
+                return false
+            }
+            currentIndex = self.index(moved: direction, from: index)
+        }
+        return true
+    }
 }
 
 extension Grid: CustomStringConvertible where T == Character {

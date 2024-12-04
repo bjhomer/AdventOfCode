@@ -50,6 +50,17 @@ final class GridTests: XCTestCase {
         XCTAssertEqual(values, ["7", ".", "3", "."])
     }
 
+    func testHasSequenceInDirection() throws {
+        let start = G.Index(r: 0, c: 2)
+        
+        XCTAssertTrue(grid.hasSequence("7.3.", from: start, direction: .down))
+        XCTAssertFalse(grid.hasSequence("7.3.", from: start, direction: .up))
+        XCTAssertFalse(grid.hasSequence("7.3.", from: start, direction: .left))
+        XCTAssertFalse(grid.hasSequence("7.3.", from: start, direction: .right))
+
+        XCTAssertTrue(grid.hasSequence("7..11", from: start, direction: .right))
+    }
+
     func testIndices() throws {
         let indices = grid.indices
         XCTAssertEqual(indices.count, 100)

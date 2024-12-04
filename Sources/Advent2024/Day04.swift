@@ -31,6 +31,8 @@ struct Day04: AdventDay {
 
     func part2() -> Int {
         var successCount = 0
+
+    outer:
         for index in grid.indices {
             guard grid[index] == "A" else { continue }
 
@@ -40,9 +42,10 @@ struct Day04: AdventDay {
                    grid.hasString("MAS", from: start, direction: direction.inverse) {
                     xCount += 1
                 }
-            }
-            if xCount == 2 {
-                successCount += 1
+                if xCount == 2 {
+                    successCount += 1
+                    continue outer
+                }
             }
         }
         return successCount
@@ -51,7 +54,6 @@ struct Day04: AdventDay {
 
 private extension Day04.Grid {
     func hasString(_ string: String, from index: Grid.Index, direction: Grid.Direction) -> Bool {
-        let sequence = values(from: index, direction: direction, limit: string.count)
-        return sequence.elementsEqual(string)
+        self.hasSequence(string, from: index, direction: direction)
     }
 }
