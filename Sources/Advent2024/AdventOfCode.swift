@@ -77,7 +77,8 @@ struct AdventOfCode: AsyncParsableCommand {
       let timing2 = await run(part: challenge.part2, named: "Part 2")
 
       if benchmark {
-        print("Part 1 took \(timing1), part 2 took \(timing2).")
+          let timeStyle = Duration.UnitsFormatStyle.units(allowed: [.seconds, .milliseconds], fractionalPart: .show(length: 4))
+          print("Part 1 took \(timing1.formatted(timeStyle)), part 2 took \(timing2.formatted(timeStyle)).")
 #if DEBUG
         print("Looks like you're benchmarking debug code. Try swift run -c release")
 #endif
