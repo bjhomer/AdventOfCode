@@ -93,21 +93,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AdventOfCode2024"
-            BuildableName = "AdventOfCode2024"
-            BlueprintName = "AdventOfCode2024"
+            BlueprintIdentifier = "Advent2024"
+            BuildableName = "Advent2024"
+            BlueprintName = "Advent2024"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "AdventOfCode2024"
-            BuildableName = "AdventOfCode2024"
-            BlueprintName = "AdventOfCode2024"
-            ReferencedContainer = "container:">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
