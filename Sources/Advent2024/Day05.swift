@@ -14,6 +14,9 @@ struct Day05: AdventDay {
     var orderingRules: [OrderingRule]
     var pageLists: [PageList]
 
+    // It would be unsafe if we were to access this
+    // from multiple threads. But we pinky-promise
+    // never to do that.
     nonisolated(unsafe)
     var pageManager: PageManager
 
