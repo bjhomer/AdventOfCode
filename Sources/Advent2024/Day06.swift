@@ -92,38 +92,43 @@ struct Day06: AdventDay {
 
 private extension Day06.Grid {
     struct PathStep: Hashable {
-        let index: Grid.Index
-        let direction: Grid.Direction
+        var index: Grid.Index
+        var direction: Grid.Direction
+    }
+
+    func nextStep(for traveller: PathStep) -> PathStep? {
+        guard let nextLocation = index(moved: traveller.direction, from: traveller.index)
+        else {
+            return nil
+        }
+
+        var newTraveller = traveller
+        if self[nextLocation] == "#" {
+            newTraveller.direction = traveller.direction.rotated(.clockwise90)
+        }
+        else {
+            newTraveller.index = nextLocation
+        }
+        return newTraveller
     }
 
     func loops(from start: Grid.Index) -> Bool {
-
-        var currentIndex = start
-        var currentDirection: Grid.Direction = .up
-        var visitedSteps: Set<PathStep> = []
+        var tortoise: PathStep? = PathStep(index: start, direction: .up)
+        var hare: PathStep? = PathStep(index: start, direction: .up)
 
         while true {
-            let line = indices(from: currentIndex, direction: currentDirection)
-                .prefix(while: { self[$0] != "#"} )
-
-            let steps = line.map { PathStep(index: $0, direction: currentDirection)}
-            for step in steps {
-                if visitedSteps.contains(step) {
-                    // we found a loop!
+            for _ in 0..<2 {
+                hare = nextStep(for: hare!)
+                if hare == nil {
+                    // We found an exit; no loop here!
+                    return false
+                }
+                if tortoise == hare {
+                    // We looped
                     return true
                 }
             }
-
-            visitedSteps.formUnion(steps)
-
-            if index(moved: currentDirection, from: line.last!) == nil {
-                // We walked off the end
-                break
-            }
-            else {
-                currentDirection = currentDirection.rotated(.clockwise90)
-                currentIndex = line.last!
-            }
+            tortoise = nextStep(for: tortoise!)
         }
         return false
     }
