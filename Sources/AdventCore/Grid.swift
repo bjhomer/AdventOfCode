@@ -232,55 +232,60 @@ extension Grid {
 }
 
 extension Grid {
-    public enum Direction: CaseIterable, Equatable, Hashable {
-        case up, down, left, right
-        case upLeft, upRight, downLeft, downRight
+    public typealias Direction = GridDirection
+    public typealias Rotation = GridRotation
+}
 
-        public static var cardinals: [Direction] { [.up, .down, .left, .right] }
-        public static var diagonals: [Direction] { [.upLeft, .upRight, .downLeft, .downRight] }
+public enum GridRotation {
+    case clockwise45
+    case clockwise90
+    case clockwise180
+    case counterClockwise45
+    case counterClockwise90
+    case counterClockwise180
+}
 
-        var offsets: (r: Int, c: Int) {
-            switch self {
-            case .up:   return (r: -1, c: 0)
-            case .down: return (r: 1, c: 0)
-            case .left: return (r: 0, c: -1)
-            case .right: return (r: 0, c: 1)
-            case .upLeft:   return (r: -1, c: -1)
-            case .upRight:  return (r: -1, c: 1)
-            case .downLeft: return (r: 1, c: -1)
-            case .downRight: return (r: 1, c: 1)
-            }
-        }
 
-        public var inverse: Direction {
-            self.rotated(.counterClockwise180)
-        }
+public enum GridDirection: CaseIterable, Equatable, Hashable, Sendable {
+    case up, down, left, right
+    case upLeft, upRight, downLeft, downRight
 
-        public func rotated(_ rotation: Rotation) -> Direction {
-            let clockwiseOrder: [Direction] = [.up, .upRight, .right, .downRight, .down, .downLeft, .left, .upLeft]
+    public static var cardinals: [GridDirection] { [.up, .down, .left, .right] }
+    public static var diagonals: [GridDirection] { [.upLeft, .upRight, .downLeft, .downRight] }
 
-            let startIndex = clockwiseOrder.firstIndex(of: self)!
-
-            let offset = switch rotation {
-            case .clockwise45: 1
-            case .clockwise90: 2
-            case .clockwise180: 4
-            case .counterClockwise45: 7
-            case .counterClockwise90: 6
-            case .counterClockwise180: 4
-            }
-
-            let newIndex = (startIndex + offset).positiveMod(clockwiseOrder.count)
-            return clockwiseOrder[newIndex]
+    var offsets: (r: Int, c: Int) {
+        switch self {
+        case .up:   return (r: -1, c: 0)
+        case .down: return (r: 1, c: 0)
+        case .left: return (r: 0, c: -1)
+        case .right: return (r: 0, c: 1)
+        case .upLeft:   return (r: -1, c: -1)
+        case .upRight:  return (r: -1, c: 1)
+        case .downLeft: return (r: 1, c: -1)
+        case .downRight: return (r: 1, c: 1)
         }
     }
 
-    public enum Rotation {
-        case clockwise45
-        case clockwise90
-        case clockwise180
-        case counterClockwise45
-        case counterClockwise90
-        case counterClockwise180
+    public var inverse: GridDirection {
+        self.rotated(.counterClockwise180)
+    }
+
+    static let clockwiseOrder: [GridDirection] = [.up, .upRight, .right, .downRight, .down, .downLeft, .left, .upLeft]
+
+    public func rotated(_ rotation: Grid.Rotation) -> GridDirection {
+        let clockwiseOrder = Self.clockwiseOrder
+        let startIndex = clockwiseOrder.firstIndex(of: self)!
+
+        let offset = switch rotation {
+        case .clockwise45: 1
+        case .clockwise90: 2
+        case .clockwise180: 4
+        case .counterClockwise45: 7
+        case .counterClockwise90: 6
+        case .counterClockwise180: 4
+        }
+
+        let newIndex = (startIndex + offset).positiveMod(clockwiseOrder.count)
+        return clockwiseOrder[newIndex]
     }
 }
