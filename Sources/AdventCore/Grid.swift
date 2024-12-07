@@ -232,7 +232,7 @@ extension Grid {
 }
 
 extension Grid {
-    public enum Direction: CaseIterable, Equatable {
+    public enum Direction: CaseIterable, Equatable, Hashable {
         case up, down, left, right
         case upLeft, upRight, downLeft, downRight
 

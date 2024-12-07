@@ -9,6 +9,7 @@ let allChallenges: [any AdventDay] = [
   Day03(),
   Day04(),
   Day05(),
+  Day06(),
 ]
 
 @main
@@ -77,7 +78,7 @@ struct AdventOfCode: AsyncParsableCommand {
       let timing2 = await run(part: challenge.part2, named: "Part 2")
 
       if benchmark {
-          let timeStyle = Duration.UnitsFormatStyle.units(allowed: [.seconds, .milliseconds], fractionalPart: .show(length: 4))
+          let timeStyle = Duration.UnitsFormatStyle.units(allowed: [.milliseconds], width:.abbreviated, fractionalPart: .show(length: 2))
           print("Part 1 took \(timing1.formatted(timeStyle)), part 2 took \(timing2.formatted(timeStyle)).")
 #if DEBUG
         print("Looks like you're benchmarking debug code. Try swift run -c release")
