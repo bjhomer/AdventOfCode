@@ -44,49 +44,31 @@ struct Day06: AdventDay {
     func part2() -> Int {
 
         let startPoint = grid.firstIndex(of: "^")!
-        var currentIndex = startPoint
-        var currentDirection: Grid.Direction = .up
 
-        let locationsOnExitPath = Set(grid.stepsToExit()!.map(\.index))
         var checkedPoints: Set<GridPoint> = []
-        var loopingObstacles: Set<GridPoint> = []
+        var loopingObstacles = 0
+
+        var traveller: Grid.PathStep = .init(index: startPoint, direction: .up)
 
         while true {
-            let walkedLine = grid.indices(from: currentIndex, direction: currentDirection)
-                .prefix(while: { grid[$0] != "#"} )
-
-            for point in walkedLine {
-                guard locationsOnExitPath.contains(point) else {
-                    // The path never crosses here; an obstacle
-                    // here will not have any effect
-                    continue
-                }
-                if checkedPoints.contains(point) {
-                    continue
-                }
-                if grid[point] == "^" {
-                    continue
-                }
+            if checkedPoints.contains(traveller.index) == false,
+               grid[traveller.index] != "^"
+            {
                 var modifiedGrid = grid
-                modifiedGrid[point] = "#"
+                modifiedGrid[traveller.index] = "#"
 
                 if modifiedGrid.loops(from: startPoint) {
-                    loopingObstacles.insert(point)
+                    loopingObstacles += 1
                 }
-                checkedPoints.insert(point)
+                checkedPoints.insert(traveller.index)
             }
-
-            if grid.index(moved: currentDirection, from: walkedLine.last!) == nil {
-                // We walked off the end
+            guard let nextPoint = grid.nextStep(for: traveller) else {
                 break
             }
-            else {
-                currentDirection = currentDirection.rotated(.clockwise90)
-                currentIndex = walkedLine.last!
-            }
+            traveller = nextPoint
         }
 
-        return loopingObstacles.count
+        return loopingObstacles
     }
 }
 
@@ -131,40 +113,6 @@ private extension Day06.Grid {
             tortoise = nextStep(for: tortoise!)
         }
         return false
-    }
-
-    func stepsToExit() -> [Grid.PathStep]? {
-
-        var currentIndex = firstIndex(of: "^")!
-        var currentDirection: Grid.Direction = .up
-        var visitedSteps: [Grid.PathStep] = []
-
-        while true {
-            let line = indices(from: currentIndex, direction: currentDirection)
-                .prefix(while: { self[$0] != "#"} )
-
-            let steps = line.map { Grid.PathStep(index: $0, direction: currentDirection)}
-
-            for step in steps {
-                if visitedSteps.contains(step) {
-                    // we found a loop!
-                    return nil
-                }
-            }
-
-            visitedSteps.append(contentsOf: steps)
-
-            if index(moved: currentDirection, from: line.last!) == nil {
-                // We walked off the end
-                break
-            }
-            else {
-                currentDirection = currentDirection.rotated(.clockwise90)
-                currentIndex = line.last!
-            }
-        }
-
-        return visitedSteps
     }
 }
 
