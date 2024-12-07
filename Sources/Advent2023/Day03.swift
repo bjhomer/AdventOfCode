@@ -17,7 +17,7 @@ struct Day03: AdventDay {
 
 
         let candidatePartLocations = symbolLocations
-            .flatMap { grid.surroundingIndices(of: $0) }
+            .flatMap { grid.surroundingNeighbors(of: $0) }
         |> { Set($0) }
 
 
@@ -61,17 +61,16 @@ private extension Grid where T == Character {
     }
 
     func surroundingPartNumbers(at index: Index) -> [(start: Index, value: Int)] {
-        return surroundingIndices(of: index)
+        return surroundingNeighbors(of: index)
             .compactMap { partNumber(at: $0) }
             .uniqued(on: \.start)
     }
 
     func isGear(at index: Index) -> Bool {
-        surroundingIndices(of: index)
+        surroundingNeighbors(of: index)
             .compactMap { partNumber(at: $0) }
             .uniqued(on: \.start)
             .count == 2
-
     }
 }
 

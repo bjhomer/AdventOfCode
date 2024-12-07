@@ -71,6 +71,11 @@ public struct Grid<T: Sendable>: Sendable {
     public var minR: Int { minY }
     public var maxR: Int { maxY }
 
+    public var xRange: Range<Int> { minX..<(maxX+1) }
+    public var yRange: Range<Int> { minY..<(maxY+1) }
+    public var rowRange: Range<Int> { minR..<(maxR+1) }
+    public var colRange: Range<Int> { minC..<(maxC+1) }
+
     private var topLeft = GridPoint(r: 0, c: 0)
     private var rows: [[T]]
 
@@ -98,7 +103,7 @@ public struct Grid<T: Sendable>: Sendable {
     }
 
     public var indices: [Index] {
-        return Array(product(minR...maxR, minC...maxC).map { Index(r: $0.0, c: $0.1) })
+        return Array(product(rowRange, colRange).map { Index(r: $0.0, c: $0.1) })
     }
 
     public subscript(row r: Int, column c: Int) -> T {
@@ -119,40 +124,6 @@ public struct Grid<T: Sendable>: Sendable {
         set { self[row: index.r, column: index.c] = newValue }
     }
 
-    public enum Direction: CaseIterable, Equatable {
-        case up, down, left, right
-        case upLeft, upRight, downLeft, downRight
-
-        public static var cardinals: [Direction] { [.up, .down, .left, .right] }
-        public static var diagonals: [Direction] { [.upLeft, .upRight, .downLeft, .downRight] }
-
-        var offsets: (r: Int, c: Int) {
-            switch self {
-            case .up:   return (r: -1, c: 0)
-            case .down: return (r: 1, c: 0)
-            case .left: return (r: 0, c: -1)
-            case .right: return (r: 0, c: 1)
-            case .upLeft:   return (r: -1, c: -1)
-            case .upRight:  return (r: -1, c: 1)
-            case .downLeft: return (r: 1, c: -1)
-            case .downRight: return (r: 1, c: 1)
-            }
-        }
-
-        public var inverse: Direction {
-            switch self {
-            case .up:   return .down
-            case .down: return .up
-            case .left: return .right
-            case .right: return .left
-            case .upLeft:   return .downRight
-            case .upRight:  return .downLeft
-            case .downLeft: return .upRight
-            case .downRight: return .upLeft
-            }
-        }
-    }
-
     public func index(moved: Direction, from start: Index) -> Index? {
         let index = start.offset(by: moved.offsets)
         guard isValidIndex(index) else { return nil }
@@ -164,19 +135,13 @@ public struct Grid<T: Sendable>: Sendable {
     }
     
     /// Returs the four cardinal neighbors of this index
-    public func neighbors(of index: Index) -> [Index] {
-        Direction.allCases.compactMap { self.index(moved:$0, from: index) }
+    public func cardinalNeighbors(of index: Index) -> [Index] {
+        Direction.cardinals.compactMap { self.index(moved:$0, from: index) }
     }
     
     /// Returns all surrounding indices, including diagonals
-    public func surroundingIndices(of index: Index) -> [Index] {
-        let deltas = product((-1...1), (-1...1))
-
-        let result = deltas
-            .map { Index(x: index.x + $0.0, y: index.y + $0.1) }
-            .filter { isValidIndex($0) && index != $0 }
-
-        return result
+    public func surroundingNeighbors(of index: Index) -> [Index] {
+        Direction.allCases.compactMap { self.index(moved:$0, from: index) }
     }
     
     /// Walks from the start position in the indicated direction, testing
@@ -212,6 +177,10 @@ public struct Grid<T: Sendable>: Sendable {
         }
         return result
     }
+
+    public func indices(from start: Index, direction: Direction) -> some Sequence<Index> {
+        return GridPointSequence(rowRange: rowRange, columnRange: colRange, direction: direction, currentValue: start)
+    }
 }
 
 extension Grid where T: Equatable {
@@ -239,5 +208,79 @@ extension Grid where T: Equatable {
 extension Grid: CustomStringConvertible where T == Character {
     public var description: String {
         zip((minR)...(maxR), rows).map { "\(String($0).padding(toLength: 3, withPad: " ", startingAt: 0)) \(String($1))" }.joined(separator: "\n")
+    }
+}
+
+extension Grid {
+    struct GridPointSequence: Sequence, IteratorProtocol {
+        var rowRange: Range<Int>
+        var columnRange: Range<Int>
+
+        var direction: Grid.Direction
+        var currentValue: GridPoint
+
+        mutating func next() -> GridPoint? {
+            let result = currentValue
+            guard rowRange ~= result.r && columnRange ~= result.c else {
+                return nil
+            }
+            let nextValue = currentValue.offset(by: direction.offsets)
+            currentValue = nextValue
+            return result
+        }
+    }
+}
+
+extension Grid {
+    public enum Direction: CaseIterable, Equatable {
+        case up, down, left, right
+        case upLeft, upRight, downLeft, downRight
+
+        public static var cardinals: [Direction] { [.up, .down, .left, .right] }
+        public static var diagonals: [Direction] { [.upLeft, .upRight, .downLeft, .downRight] }
+
+        var offsets: (r: Int, c: Int) {
+            switch self {
+            case .up:   return (r: -1, c: 0)
+            case .down: return (r: 1, c: 0)
+            case .left: return (r: 0, c: -1)
+            case .right: return (r: 0, c: 1)
+            case .upLeft:   return (r: -1, c: -1)
+            case .upRight:  return (r: -1, c: 1)
+            case .downLeft: return (r: 1, c: -1)
+            case .downRight: return (r: 1, c: 1)
+            }
+        }
+
+        public var inverse: Direction {
+            self.rotated(.counterClockwise180)
+        }
+
+        public func rotated(_ rotation: Rotation) -> Direction {
+            let clockwiseOrder: [Direction] = [.up, .upRight, .right, .downRight, .down, .downLeft, .left, .upLeft]
+
+            let startIndex = clockwiseOrder.firstIndex(of: self)!
+
+            let offset = switch rotation {
+            case .clockwise45: 1
+            case .clockwise90: 2
+            case .clockwise180: 4
+            case .counterClockwise45: 7
+            case .counterClockwise90: 6
+            case .counterClockwise180: 4
+            }
+
+            let newIndex = (startIndex + offset).positiveMod(clockwiseOrder.count)
+            return clockwiseOrder[newIndex]
+        }
+    }
+
+    public enum Rotation {
+        case clockwise45
+        case clockwise90
+        case clockwise180
+        case counterClockwise45
+        case counterClockwise90
+        case counterClockwise180
     }
 }

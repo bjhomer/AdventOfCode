@@ -102,7 +102,7 @@ private extension Grid where T: Equatable {
                 return node.path()
             }
 
-            let candidates = self.neighbors(of: node.item)
+            let candidates = self.cardinalNeighbors(of: node.item)
                 .filter { canTraverse(node.item, $0) && visited.contains($0) == false }
                 .map { PathNode(item: $0, previous: node) }
 
