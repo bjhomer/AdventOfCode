@@ -19,14 +19,14 @@ struct Day07: AdventDay {
 
     func part1() -> Int {
         return checks
-            .filter { $0.evaluatePart1() }
+            .filter { $0.evaluate(operations: [.mul, .add]) }
             .map(\.testValue)
             .reduce(0, +)
     }
 
     func part2() -> Int {
         return checks
-            .filter { $0.evaluatePart2() }
+            .filter { $0.evaluate(operations: [.concat, .mul, .add]) }
             .map(\.testValue)
             .reduce(0, +)
     }
@@ -42,14 +42,6 @@ extension Day07 {
             case mul
             case concat
 
-            var name: String {
-                switch self {
-                case .add: return "+"
-                case .mul: return "*"
-                case .concat: return "||"
-                }
-            }
-
             func evaluate(_ x: Int, _ y: Int) -> Int {
                 switch self {
                 case .add: return x+y
@@ -57,9 +49,7 @@ extension Day07 {
                 case .concat: return x * 10.pow(y.digitCount) + y
                 }
             }
-            
-            static let part1Cases: [Operation] = [.mul, .add]
-            static let part2Cases: [Operation] = [.concat, .mul, .add]
+
         }
         
         init(line: some StringProtocol) {
@@ -68,20 +58,12 @@ extension Day07 {
             numbers = others.split(separator: " ").map { $0.int! }
         }
         
-        func evaluatePart1() -> Bool {
+        func evaluate(operations: [Operation]) -> Bool {
             var numbers = self.numbers[...]
             let next = numbers.popFirst()!
             let rest = numbers
 
-            return evaluateBounded(next, remainingNums: rest, operations: Operation.part1Cases)
-        }
-        
-        func evaluatePart2() -> Bool {
-            var numbers = self.numbers[...]
-            let next = numbers.popFirst()!
-            let rest = numbers
-
-            return evaluateBounded(next, remainingNums: rest, operations: Operation.part2Cases)
+            return evaluateBounded(next, remainingNums: rest, operations: operations)
         }
 
         func evaluateBounded(_ resultSoFar: Int, remainingNums: some Collection<Int>, operations: [Operation]) -> Bool
@@ -102,19 +84,6 @@ extension Day07 {
                 }
             }
             return false
-        }
-        
-        func evaluate(operations: [Operation]) -> Bool {
-            var numbers = self.numbers[...]
-            var result = numbers.popFirst()!
-
-            for (num, op) in zip(numbers, operations) {
-                result = op.evaluate(result, num)
-                if result > testValue {
-                    return false
-                }
-            }
-            return result == testValue
         }
     }
 }
