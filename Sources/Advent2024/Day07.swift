@@ -54,12 +54,12 @@ extension Day07 {
                 switch self {
                 case .add: return x+y
                 case .mul: return x*y
-                case .concat: return (String(x)+String(y)).int!
+                case .concat: return x * 10.pow(y.digitCount) + y
                 }
             }
             
-            static let part1Cases: [Operation] = [.add, .mul]
-            static let part2Cases: [Operation] = [.add, .mul, .concat]
+            static let part1Cases: [Operation] = [.mul, .add]
+            static let part2Cases: [Operation] = [.concat, .mul, .add]
         }
         
         init(line: some StringProtocol) {
@@ -69,20 +69,44 @@ extension Day07 {
         }
         
         func evaluatePart1() -> Bool {
-            let combos = Operation.part1Cases.combinationsWithReplacement(count: numbers.count - 1)
-            return combos.contains(where: { evaluate(operations: $0)} )
+            var numbers = self.numbers[...]
+            let next = numbers.popFirst()!
+            let rest = numbers
+
+            return evaluateBounded(next, remainingNums: rest, operations: Operation.part1Cases)
         }
         
         func evaluatePart2() -> Bool {
-            let combos = Operation.part2Cases.combinationsWithReplacement(count: numbers.count - 1)
-            return combos.contains(where: { evaluate(operations: $0)} )
+            var numbers = self.numbers[...]
+            let next = numbers.popFirst()!
+            let rest = numbers
+
+            return evaluateBounded(next, remainingNums: rest, operations: Operation.part2Cases)
+        }
+
+        func evaluateBounded(_ resultSoFar: Int, remainingNums: some Collection<Int>, operations: [Operation]) -> Bool
+        {
+            var remainingNums = remainingNums[...]
+            if remainingNums.isEmpty {
+                return resultSoFar == testValue
+            }
+            if resultSoFar > testValue {
+                return false
+            }
+
+            let next = remainingNums.popFirst()!
+
+            for op in operations {
+                if evaluateBounded(op.evaluate(resultSoFar, next), remainingNums: remainingNums, operations: operations) {
+                    return true
+                }
+            }
+            return false
         }
         
         func evaluate(operations: [Operation]) -> Bool {
             var numbers = self.numbers[...]
             var result = numbers.popFirst()!
-
-            print("evaluating \(operations.map(\.name))")
 
             for (num, op) in zip(numbers, operations) {
                 result = op.evaluate(result, num)

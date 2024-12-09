@@ -96,7 +96,6 @@ public extension Collection {
     }
 
     func combinationsWithReplacement(count: Int) -> some Sequence<[Element]> {
-
         return CombinationsWithReplacementSequence(base: self, count: count)
     }
 
