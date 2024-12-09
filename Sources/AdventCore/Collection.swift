@@ -95,13 +95,9 @@ public extension Collection {
         return remainder.reduce(initial, step)
     }
 
-    func combinationsWithReplacement(count: Int) -> [[Element]] {
-        if count == 0 { return [[]] }
+    func combinationsWithReplacement(count: Int) -> some Sequence<[Element]> {
 
-        return self.flatMap { (head) in
-            combinationsWithReplacement(count: count - 1)
-                .map { [head] + $0 }
-        }
+        return CombinationsWithReplacementSequence(base: self, count: count)
     }
 
     func divided(at index: Index) -> (head: SubSequence, tail: SubSequence) {
@@ -261,6 +257,41 @@ extension AsyncSequence where Element: Equatable, Element: Sendable {
             }
             else {
                 return nil
+            }
+        }
+    }
+}
+
+
+struct CombinationsWithReplacementSequence<Base: Collection>: Sequence, IteratorProtocol {
+    let base: Base
+    var index: [Base.Index]
+
+    init(base: Base, count: Int) {
+        self.base = base
+        self.index = Array(repeating: base.startIndex, count: count)
+    }
+
+    typealias Element = [Base.Element]
+
+    mutating func next() -> Element? {
+        if index.first == base.endIndex { return nil }
+        let values = index.map { base[$0] }
+        increment(&index)
+        return values
+    }
+
+    func increment(_ index: inout [Base.Index]) {
+        for subIndex in index.indices.reversed() {
+            let nextValueForSubIndex = base.index(after: index[subIndex])
+            index[subIndex] = nextValueForSubIndex
+
+            if subIndex != 0 && index[subIndex] == base.endIndex {
+                index[subIndex] = base.startIndex
+                continue
+            }
+            else {
+                return
             }
         }
     }
