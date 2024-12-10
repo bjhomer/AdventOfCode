@@ -36,3 +36,7 @@ public extension Collection where Element == Character {
         map { String($0) }.joined()
     }
 }
+
+public extension Character {
+    var int: Int? { Int(String(self)) }
+}

@@ -37,6 +37,10 @@ public extension Int {
         for _ in 1...exponent { result *= self }
         return result
     }
+
+    var string: String {
+        String(self)
+    }
 }
 
 public func gcd(_ a: Int, _ b: Int) -> Int {
