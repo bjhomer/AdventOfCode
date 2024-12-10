@@ -55,6 +55,15 @@ public struct GridPoint: Hashable, Codable, CustomStringConvertible, Sendable {
     }
 }
 
+public struct GridBounds: Hashable, Sendable {
+    public var rowRange: Range<Int>
+    public var colRange: Range<Int>
+
+    public func isValid(_ point: GridPoint) -> Bool {
+        rowRange.contains(point.r) && colRange.contains(point.c)
+    }
+}
+
 public struct Grid<T: Sendable>: Sendable {
     public typealias Index = GridPoint
 
@@ -75,6 +84,8 @@ public struct Grid<T: Sendable>: Sendable {
     public var yRange: Range<Int> { minY..<(maxY+1) }
     public var rowRange: Range<Int> { minR..<(maxR+1) }
     public var colRange: Range<Int> { minC..<(maxC+1) }
+
+    public var bounds: GridBounds { .init(rowRange: rowRange, colRange: colRange) }
 
     private var topLeft = GridPoint(r: 0, c: 0)
     private var rows: [[T]]
