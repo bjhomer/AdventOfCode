@@ -39,4 +39,5 @@ public extension Collection where Element == Character {
 
 public extension Character {
     var int: Int? { Int(String(self)) }
+    var forceInt: Int { Int(String(self))! }
 }
