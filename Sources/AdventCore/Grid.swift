@@ -50,6 +50,14 @@ public struct GridPoint: Hashable, Codable, CustomStringConvertible, Sendable {
         return copy
     }
 
+    public func moved(_ direction: GridDirection) -> Self {
+        return offset(by: direction.offsets)
+    }
+
+    public var cardinalNeighbors: [GridPoint] {
+        GridDirection.cardinals.map { self.moved($0) }
+    }
+
     public var description: String {
         "(r\(r), c\(c))"
     }
