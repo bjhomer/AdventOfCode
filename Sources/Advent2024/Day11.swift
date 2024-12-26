@@ -104,7 +104,7 @@ extension Day11 {
         var value: Int? {
             switch self {
             case .value(let x): return x
-            case .split(let left, let right): return nil
+            case .split(_, _): return nil
             }
         }
 

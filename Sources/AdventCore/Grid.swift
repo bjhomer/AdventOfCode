@@ -58,6 +58,10 @@ public struct GridPoint: Hashable, Codable, CustomStringConvertible, Sendable {
         GridDirection.cardinals.map { self.moved($0) }
     }
 
+    public var allNeighbors: [GridPoint] {
+        GridDirection.allCases.map { self.moved($0) }
+    }
+
     public var description: String {
         "(r\(r), c\(c))"
     }
@@ -121,6 +125,14 @@ public struct Grid<T: Sendable>: Sendable {
         rows = Array(repeating: defaultRow, count: height)
     }
 
+    public init(width: Int, height: Int, defaultValue: T) {
+        self.width = width
+        self.height = height
+        
+        let defaultRow = Array(repeating: defaultValue, count: width)
+        rows = Array(repeating: defaultRow, count: height)
+    }
+
     public var indices: [Index] {
         return Array(product(rowRange, colRange).map { Index(r: $0.0, c: $0.1) })
     }
@@ -150,7 +162,7 @@ public struct Grid<T: Sendable>: Sendable {
     }
 
     public func isValidIndex(_ index: Index) -> Bool {
-        return (minR...maxR) ~= index.r && (minR...maxR) ~= index.c
+        return (minR...maxR) ~= index.r && (minC...maxC) ~= index.c
     }
     
     /// Returs the four cardinal neighbors of this index
@@ -199,6 +211,25 @@ public struct Grid<T: Sendable>: Sendable {
 
     public func indices(from start: Index, direction: Direction) -> some Sequence<Index> {
         return GridPointSequence(rowRange: rowRange, columnRange: colRange, direction: direction, currentValue: start)
+    }
+
+    public func mapByValue<U>(_ transform: (T)->U) -> Grid<U> {
+        Grid<U>(rows: rows.map{ $0.map(transform) })
+    }
+
+    public func mapByIndex<U>(_ transform: (Index)->U) -> Grid<U> {
+        var newRows: [[U]] = []
+
+        for i in rowRange {
+            var row: [U] = []
+            for j in colRange {
+                let index = GridPoint(r: i, c: j)
+                let newValue = transform(index)
+                row.append(newValue)
+            }
+            newRows.append(row)
+        }
+        return Grid<U>(rows: newRows)
     }
 }
 

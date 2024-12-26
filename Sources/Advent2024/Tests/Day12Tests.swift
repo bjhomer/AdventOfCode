@@ -49,6 +49,29 @@ struct Day12Tests {
         #expect(region.perimeter == 10)
     }
 
+    @Test func testSideCount() {
+        let region = Day12.Region(name: "A", points: [
+            .init(r: 0, c: 0),
+            .init(r: 0, c: 1),
+            .init(r: 0, c: 2),
+            .init(r: 0, c: 3),
+        ])
+
+        #expect(region.sideCount == 4)
+    }
+
+    @Test func testSideCountComplex() {
+        let region = Day12.Region(name: "A", points: [
+            .init(r: 0, c: 0),
+            .init(r: 0, c: 1),
+            .init(r: 1, c: 1),
+            .init(r: 1, c: 2),
+            .init(r: 1, c: 3),
+        ])
+
+        #expect(region.sideCount == 8)
+    }
+
     @Test func test1_part1() throws {
         let day = Day12(data: testData1)
         #expect(day.part1() == 140)
@@ -62,5 +85,20 @@ struct Day12Tests {
     @Test func test3_part1() throws {
         let day = Day12(data: testData3)
         #expect(day.part1() == 1930)
+    }
+
+    @Test func test1_part2() throws {
+        let day = Day12(data: testData1)
+        #expect(day.part2() == 80)
+    }
+
+    @Test func test2_part2() throws {
+        let day = Day12(data: testData2)
+        #expect(day.part2() == 436)
+    }
+
+    @Test func test3_part2() throws {
+        let day = Day12(data: testData3)
+        #expect(day.part2() == 1206)
     }
 }
