@@ -1,6 +1,15 @@
 {
-  "originHash" : "897286554e21c42e3147f7e557c52335874d8dbcc7506e509ed8f55dd3033aaa",
+  "originHash" : "dfd44ea68aa6264dc3a8c0c8f6b015cb76c9e5a59cf329cace2f5f2b0f59bdf6",
   "pins" : [
+    {
+      "identity" : "surge",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Jounce/Surge.git",
+      "state" : {
+        "revision" : "6e4a47e63da8801afe6188cf039e9f04eb577721",
+        "version" : "2.3.2"
+      }
+    },
     {
       "identity" : "swift-algorithms",
       "kind" : "remoteSourceControl",

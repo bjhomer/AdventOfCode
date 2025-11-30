@@ -9,7 +9,8 @@ let dependencies: [Target.Dependency] = [
     .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
     .product(name: "StandardLibraryPreview", package: "swift-standard-library-preview"),
     .product(name: "SwiftGraph", package: "SwiftGraph"),
-    .product(name: "Collections", package: "swift-collections")
+    .product(name: "Collections", package: "swift-collections"),
+    .product(name: "Surge", package: "surge")
 ]
 
 let package = Package(
@@ -23,6 +24,7 @@ let package = Package(
         .package(url: "https://github.com/davecom/SwiftGraph", .upToNextMajor(from: "3.0.0")),
         .package(url: "https://github.com/apple/swift-standard-library-preview.git", from: "0.0.3"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.4"),
+        .package(url: "https://github.com/Jounce/Surge.git", from: "2.3.2"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

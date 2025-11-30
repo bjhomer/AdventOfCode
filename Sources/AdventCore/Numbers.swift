@@ -43,11 +43,32 @@ public extension Int {
     }
 }
 
+extension FloatingPoint {
+    public var isIntegral: Bool {
+        truncatingRemainder(dividingBy: 1) == 0
+    }
+}
+
+/// Computsed the greatest common divisor of two numbers
 public func gcd(_ a: Int, _ b: Int) -> Int {
     if b == 0 { return a }
     return gcd(b, a % b)
 }
 
+/// Computes the common divisor of inputs `a` and `b`, as
+/// well as two integers `x` and `y` that satisfy the equation
+/// `ax + by = gcd`
+///
+/// Uses the Extended Euclidean algorithm.
+public func egcd(_ a: Int, _ b: Int) -> (g: Int, x: Int, y: Int) {
+    if b == 0 { return (a, 1, 0) }
+    let (g, x1, y1) = egcd(b, a % b)
+    let x = y1
+    let y = x1 - (a / b) * y1
+    return (g, x, y)
+}
+
+/// Computes the least common multiple of two numbers
 public func lcm(_ a: Int, _ b: Int) -> Int {
     return a * b / gcd(a, b)
 }
