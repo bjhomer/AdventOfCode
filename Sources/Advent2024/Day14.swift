@@ -50,7 +50,39 @@ struct Day14: AdventDay {
     }
     
     func part2() -> Int {
-        0
+        for i in 0...100_000 {
+            if i.isMultiple(of: 100) {
+                debug("checking \(i)")
+            }
+            if checkPossiblyChristmasTree(after: i) {
+                return i
+            }
+        }
+        return 0
+    }
+    
+    func checkPossiblyChristmasTree(after steps: Int) -> Bool {
+        
+        let positions = robots
+            .map { $0.position(after: steps, gridSize: gridSize) }
+        
+        var grid = Grid<Character>(width: gridSize.width, height: gridSize.height, defaultValue: " ")
+        
+        for point in positions {
+            grid[point] = "*"
+        }
+        
+        let lotsOfOnes = Array<Character>(repeating: "*", count: 15)
+        
+        for rowNum in grid.rowRange {
+            let row = grid[row: rowNum]
+            if row.contains(lotsOfOnes) {
+                print("\n\n Steps: \(steps)")
+                print(grid.description)
+                return true
+            }
+        }
+        return false
     }
 }
 
