@@ -65,6 +65,14 @@ public struct GridPoint: Hashable, Codable, CustomStringConvertible, Sendable {
     public var description: String {
         "(r\(r), c\(c))"
     }
+    
+    public func scaled(by factor: Int) -> Self {
+        Self(r: r * factor, c: c * factor)
+    }
+    
+    public static func + (lhs: GridPoint, rhs: GridPoint) -> GridPoint {
+        .init(r: lhs.r + rhs.r, c: lhs.c + rhs.c)
+    }
 }
 
 public struct GridBounds: Hashable, Sendable {

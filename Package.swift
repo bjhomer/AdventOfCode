@@ -54,11 +54,14 @@ let package = Package(
                 exclude: ["Inputs"]),
         .target(
             name: "AdventCore",
-            dependencies: dependencies
+            dependencies: dependencies,
+            exclude: ["Tests"]
         ),
         .testTarget(
             name: "AdventCoreTests",
-            dependencies: ["AdventCore"]),
+            dependencies: ["AdventCore"],
+            path: "Sources/AdventCore/Tests"
+        ),
         .testTarget(
             name: "Advent2023Tests",
             dependencies: ["Advent2023"] + dependencies,

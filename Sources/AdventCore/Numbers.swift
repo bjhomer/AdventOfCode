@@ -9,11 +9,9 @@ import Foundation
 
 public extension Int {
     func positiveMod(_ divisor: Int) -> Int {
-        if self >= 0 { return self % abs(divisor) }
-        else {
-            let amountToAdd = abs(self/divisor)+divisor
-            return self + amountToAdd
-        }
+        var result = self % abs(divisor)
+        if result < 0 { result += abs(divisor) }
+        return result
     }
 
     func clamped(to range: ClosedRange<Int>) -> Int {

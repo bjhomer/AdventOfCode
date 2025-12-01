@@ -208,13 +208,16 @@ extension Day13 {
                 return nil
             }
             
-            let pressesMatrix = Matrix(column: [a.rounded(), b.rounded()])
+            let roundedA = a.rounded()
+            let roundedB = b.rounded()
+            let pressesMatrix = Matrix(column: [roundedA, roundedB])
             
             if buttonMatrix * pressesMatrix != prizeColumn {
+                debug("  Fractional presses required")
                 return nil
             }
             
-            return (Int(a.rounded()), Int(b.rounded()))
+            return (Int(roundedA), Int(roundedB))
         }
     }
 }
