@@ -264,8 +264,16 @@ extension Grid where T: Equatable {
 }
 
 extension Grid: CustomStringConvertible where T == Character {
+    public var string: String {
+        zip((minR)...(maxR), rows)
+            .map { "\(String($1))" }
+            .joined(separator: "\n")
+    }
+    
     public var description: String {
-        zip((minR)...(maxR), rows).map { "\(String($0).padding(toLength: 3, withPad: " ", startingAt: 0)) \(String($1))" }.joined(separator: "\n")
+        zip((minR)...(maxR), rows)
+            .map { "\(String($0).padding(toLength: 3, withPad: " ", startingAt: 0)) \(String($1))" }
+            .joined(separator: "\n")
     }
 }
 
