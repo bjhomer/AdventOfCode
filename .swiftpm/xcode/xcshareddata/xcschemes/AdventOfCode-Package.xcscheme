@@ -133,6 +133,20 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Advent2025"
+               BuildableName = "Advent2025"
+               BlueprintName = "Advent2025"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -172,6 +186,16 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "Advent2025Tests"
+               BuildableName = "Advent2025Tests"
+               BlueprintName = "Advent2025Tests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -188,9 +212,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Advent2024"
-            BuildableName = "Advent2024"
-            BlueprintName = "Advent2024"
+            BlueprintIdentifier = "Advent2025"
+            BuildableName = "Advent2025"
+            BlueprintName = "Advent2025"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -214,9 +238,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Advent2024"
-            BuildableName = "Advent2024"
-            BlueprintName = "Advent2024"
+            BlueprintIdentifier = "Advent2025"
+            BuildableName = "Advent2025"
+            BlueprintName = "Advent2025"
             ReferencedContainer = "container:">
          </BuildableReference>
       </BuildableProductRunnable>

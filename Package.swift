@@ -29,16 +29,21 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
+        .executableTarget(name: "Advent2025",
+                          dependencies: ["AdventCore"] + dependencies,
+                          exclude: ["Tests"],
+                          resources: [.copy("Inputs")]
+                         ),
         .executableTarget(name: "Advent2024",
                           dependencies: ["AdventCore"] + dependencies,
                           exclude: ["Tests"],
                           resources: [.copy("Inputs")]
                          ),
-       .executableTarget(name: "Advent2023",
-                         dependencies: ["AdventCore"] + dependencies,
-                         exclude: ["Tests"],
-                         resources: [.copy("Inputs")]
-                        ),
+        .executableTarget(name: "Advent2023",
+                          dependencies: ["AdventCore"] + dependencies,
+                          exclude: ["Tests"],
+                          resources: [.copy("Inputs")]
+                         ),
         .executableTarget(name: "Advent2022",
                           dependencies: ["AdventCore"] + dependencies,
                           exclude: ["Inputs"],
@@ -71,6 +76,11 @@ let package = Package(
             name: "Advent2024Tests",
             dependencies: ["Advent2024"] + dependencies,
             path: "Sources/Advent2024/Tests"
+        ),
+        .testTarget(
+            name: "Advent2025Tests",
+            dependencies: ["Advent2025"] + dependencies,
+            path: "Sources/Advent2025/Tests"
         )
     ],
     swiftLanguageModes: [.v6]
