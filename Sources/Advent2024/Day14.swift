@@ -54,6 +54,14 @@ struct Day14: AdventDay {
             if i.isMultiple(of: 100) {
                 debug("checking \(i)")
             }
+            var g = Grid<Character>(width: gridSize.width, height: gridSize.height, defaultValue: " ")
+            for robot in robots {
+                let p = robot.position(after: i, gridSize: gridSize)
+                g[p] = "o"
+            }
+            print("\n\n\n")
+            print(g.string)
+            
             if checkPossiblyChristmasTree(after: i) {
                 return i
             }

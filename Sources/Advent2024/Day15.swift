@@ -27,6 +27,9 @@ struct Day15: AdventDay {
         var warehouse = self.warehouse
         for instruction in instructions {
             warehouse.execute(instruction: instruction)
+            print("\n\n\n")
+            print(warehouse.grid)
+            try await Task.sleep(for: .milliseconds(100))
         }
     
         return warehouse.score()

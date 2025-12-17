@@ -212,11 +212,26 @@ extension Sequence {
     public func sorted<T: Comparable>(on block: (Element)->T) -> [Element] {
         return self.sorted(by: { block($0) < block($1) })
     }
-}
 
-extension Sequence {
     public func collect() -> [Element] {
         return Array(self)
+    }
+}
+
+extension Sequence where Element: Equatable {
+    public func allEqual() -> Bool {
+        var iter = makeIterator()
+        guard let first = iter.next() else {
+            // A sequence of 0 items satisfies "all equal"
+            return true
+        }
+        
+        while let next = iter.next() {
+            if next != first {
+                return false
+            }
+        }
+        return true
     }
 }
 
