@@ -47,6 +47,59 @@ extension Day02 {
         }
         
         var invalidIDs: [Int] {
+            var ids: Set<Int> = []
+            
+            let minDigitCount = String(range.lowerBound).count
+            let maxDigitCount = String(range.upperBound).count
+            
+            // Generate possible invalid IDs, then check them
+            for idDigitCount in minDigitCount...maxDigitCount {
+                let (segmentLen, remainder) = idDigitCount.quotientAndRemainder(dividingBy: 2)
+                guard remainder == 0 else { continue }
+                
+                let min = 10.pow(segmentLen-1)
+                let max = 10.pow(segmentLen)-1
+                
+                for testSegment in min...max {
+                    let testInt = testSegment.repeatDigits(2)
+                    if range.contains(testInt) {
+                        ids.insert(testInt)
+                    }
+                }
+            }
+            return Array(ids)
+        }
+
+        var invalidIDsPart2: [Int] {
+            var ids: Set<Int> = []
+            
+            let minDigitCount = String(range.lowerBound).count
+            let maxDigitCount = String(range.upperBound).count
+            
+            // Generate possible invalid IDs, then check them
+            for idDigitCount in minDigitCount...maxDigitCount {
+                if idDigitCount == 1 { continue }
+                for segmentLen in (1...(idDigitCount / 2)).reversed() {
+                    let (repeatCount, remainder) = idDigitCount.quotientAndRemainder(dividingBy: segmentLen)
+                    guard remainder == 0 else {
+                        // We can't evenly repeat the segment this many times
+                        continue
+                    }
+                    let min = 10.pow(segmentLen-1)
+                    let max = 10.pow(segmentLen)-1
+                    
+                    for testSegment in min...max {
+                        let testInt = testSegment.repeatDigits(repeatCount)
+                        if range.contains(testInt) {
+                            ids.insert(testInt)
+                        }
+                    }
+                }
+            }
+            return Array(ids)
+        }
+        
+        var invalidIDs_slow: [Int] {
             let bottom = (range.lowerBound.nextHigherEvenDigitCountNumber)
             let top = (range.upperBound.nextLowerEvenDigitCountNumber)
             
@@ -70,7 +123,8 @@ extension Day02 {
             return ids
         }
         
-        var invalidIDsPart2: [Int] {
+        
+        var invalidIDsPart2_slow: [Int] {
             var ids: [Int] = []
             
             for id in range {
@@ -113,5 +167,17 @@ private extension Int {
         
         let nextDown = 10.pow(s.count - 1) - 1
         return nextDown
+    }
+}
+
+
+extension Int {
+    func repeatDigits(_ times: Int) -> Int {
+        var result: Int = 0
+        let factor = 10.pow(digitCount)
+        for _ in 0..<times {
+            result = (result * factor) + self
+        }
+        return result
     }
 }
