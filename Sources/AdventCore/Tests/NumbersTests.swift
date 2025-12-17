@@ -18,5 +18,12 @@ struct NumbersTests {
         #expect( (-7).positiveMod(7) == 0)
         #expect( (-8).positiveMod(7) == 6)
     }
+    
+    @Test func repeatDigits() async throws {
+        #expect( 0.repeatDigits(4) == 0)
+        #expect( (130).repeatDigits(3) == 130130130 )
+        #expect( (552).repeatDigits(0) == 0 )
+        #expect( (-3).repeatDigits(4) == -3333 )
+    }
 
 }

@@ -27,6 +27,19 @@ public extension Int {
         }
         return count
     }
+    
+    func repeatDigits(_ times: Int) -> Int {
+        if self < 0 {
+            return (-self).repeatDigits(times) * -1
+        }
+        
+        var result: Int = 0
+        let factor = 10.pow(digitCount)
+        for _ in 0..<times {
+            result = (result * factor) + self
+        }
+        return result
+    }
 
     func pow(_ exponent: Int) -> Int {
         assert(exponent >= 0)

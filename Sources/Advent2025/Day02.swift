@@ -169,15 +169,3 @@ private extension Int {
         return nextDown
     }
 }
-
-
-extension Int {
-    func repeatDigits(_ times: Int) -> Int {
-        var result: Int = 0
-        let factor = 10.pow(digitCount)
-        for _ in 0..<times {
-            result = (result * factor) + self
-        }
-        return result
-    }
-}
