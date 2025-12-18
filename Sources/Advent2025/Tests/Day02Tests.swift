@@ -8,7 +8,7 @@
 import Testing
 @testable import Advent2025
 
-struct Test {
+struct Day02Tests {
 
     @Test func test11_22() async throws {
         let ids = Day02.IDRange(range: 11...22).invalidIDs

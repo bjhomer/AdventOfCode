@@ -6,6 +6,7 @@ import Foundation
 let allChallenges: [any AdventDay] = [
   Day01(),
   Day02(),
+  Day03(),
 ]
 
 @main
