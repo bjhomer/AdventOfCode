@@ -92,5 +92,17 @@ struct CollectionTests {
         seq.increment(&index)
         #expect(index == [2, 0, 0])
     }
+    
+    @Test func testZip() {
+        let s1 = [1, 2, 3]
+        let s2 = [10, 20, 30]
+        let s3 = [-1, -2, -3]
+        
+        let result = zipSequences([s1, s2, s3])
+        
+        #expect(result[0] == [1, 10, -1])
+        #expect(result[1] == [2, 20, -2])
+        #expect(result[2] == [3, 30, -3])
+    }
 
 }

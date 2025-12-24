@@ -218,6 +218,27 @@ extension Sequence {
     }
 }
 
+public func zipSequences<S: Sequence>(_ sequenceOfSequences: S) -> [[S.Element.Element]]
+where S.Element: Sequence {
+    var output: [[S.Element.Element]] = []
+    var generators: [S.Element.Iterator] = sequenceOfSequences.map { $0.makeIterator() }
+
+    // Advance all generators in lockstep, stop when any is exhausted
+    while true {
+        var nextValues: [S.Element.Element] = []
+        nextValues.reserveCapacity(generators.count)
+        
+        for i in generators.indices {
+            let value = generators[i].next()
+            guard let value else {
+                return output
+            }
+            nextValues.append(value)
+        }
+        output.append(nextValues)
+    }
+}
+
 extension Sequence where Element: Equatable {
     public func allEqual() -> Bool {
         var iter = makeIterator()
@@ -232,6 +253,10 @@ extension Sequence where Element: Equatable {
             }
         }
         return true
+    }
+    
+    public func allEqual(_ item: Element) -> Bool {
+        allSatisfy { $0 == item }
     }
 }
 
@@ -275,6 +300,4 @@ extension AsyncSequence where Element: Equatable, Element: Sendable {
         }
     }
 }
-
-
 
