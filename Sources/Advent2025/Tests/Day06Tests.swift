@@ -32,4 +32,9 @@ struct Day06Tests {
         let day = Day06(data: input)
         #expect(day.part2() == 3263827)
     }
+    
+    @Test func testProblemOutput() {
+        let p = Day06.Problem(numbers: [1, 2, 3], operation: .multiply)
+        #expect(p.description == "1 * 2 * 3")
+    }
 }

@@ -72,6 +72,14 @@ extension Day06 {
                 default: return nil
                 }
             }
+            
+            
+            var string: String {
+                switch self {
+                case .add: "+"
+                case .multiply: "*"
+                }
+            }
         }
         
         var numbers: [Int]
@@ -82,6 +90,10 @@ extension Day06 {
             case .add: return numbers.reduce(0, +)
             case .multiply: return numbers.reduce(1, *)
             }
+        }
+        
+        var description: String {
+            numbers.map(\.description).joined(separator: " \(operation.string) ")
         }
     }
 }
