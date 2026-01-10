@@ -1,5 +1,5 @@
 {
-  "originHash" : "dfd44ea68aa6264dc3a8c0c8f6b015cb76c9e5a59cf329cace2f5f2b0f59bdf6",
+  "originHash" : "e5010e87cddd08019ee4f704d94f8c3ec13086668131fcd5a022ab90f11e7974",
   "pins" : [
     {
       "identity" : "surge",
@@ -44,6 +44,15 @@
       "state" : {
         "revision" : "671108c96644956dddcd89dd59c203dcdb36cec7",
         "version" : "1.1.4"
+      }
+    },
+    {
+      "identity" : "swift-graphs",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tevelee/swift-graphs.git",
+      "state" : {
+        "revision" : "5328601a3f8aabee90fd5ecc80c974472bae737f",
+        "version" : "0.4.4"
       }
     },
     {
